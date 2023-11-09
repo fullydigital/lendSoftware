@@ -1,5 +1,5 @@
 import React from 'react';
-import Ski from '../data/ski';
+import { Ski } from '../data/ski';
 import 'react-datepicker/dist/react-datepicker.css';
 import OverviewItem from "../components/OverviewItem";
 
@@ -17,9 +17,16 @@ export default function OverallPage() {
       <img className="w-full h-auto mt-10" src={require('../assets/bannerbikever.webp')} alt="Personen beim Fahrradfahren"/>
       <div className="mt-16">
         <h2 className="uppercase font-bold text-2xl">Bike-Rent</h2>
-      <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap">
+      <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32">
         {Ski.map((item) => (<OverviewItem item={item} />))}
       </div>
+      </div>
+      <img className="w-full h-auto mt-10" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
+      <div className="mt-16">
+        <h2 className="uppercase font-bold text-2xl">Ski-Rent</h2>
+        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32">
+          {Ski.map((item) => (<OverviewItem item={item} />))}
+        </div>
       </div>
     </>
   )

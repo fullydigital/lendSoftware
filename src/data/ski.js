@@ -1,4 +1,4 @@
-export default [
+export const Ski = [
   {
     articleName: 'Fischer RC one 73 Lite + RS9',
     size: [{
