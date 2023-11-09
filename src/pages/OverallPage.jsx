@@ -1,7 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Ski from '../data/ski';
-import Select from 'react-select';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import OverviewItem from "../components/OverviewItem";
 
