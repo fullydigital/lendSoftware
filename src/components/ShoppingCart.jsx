@@ -35,7 +35,7 @@ export default function ShoppingCart() {
       while (currentDate <= new Date(item.endDate)) {
         console.log(currentDate.getDay());
         if (currentDate.getDay() > 2 || currentDate.getDay() < 1) {
-          price += item.pricePerDay;
+          price += parseInt(item.pricePerDay);
         } else {
           price += 0;
         }

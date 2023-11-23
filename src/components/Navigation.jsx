@@ -1,5 +1,9 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, {useEffect, useState} from 'react'
 import {Link} from "react-router-dom";
+import { faBars } from '@fortawesome/free-solid-svg-icons'
+
+
 export default function Navigation() {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [cartLength, setCartLength] = useState(0);
@@ -18,14 +22,14 @@ export default function Navigation() {
             <Link to="/"
               className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
             >
-              Sport Weber Schnaittach
+              <img src={require('../assets/SportWeberLogoStartseite.png')} alt="Logo" />
             </Link>
             <button
               className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
               type="button"
               onClick={() => setNavbarOpen(!navbarOpen)}
             >
-              <i className="fas fa-bars"></i>
+              <FontAwesomeIcon icon={faBars} />
             </button>
           </div>
           <div
@@ -40,7 +44,7 @@ export default function Navigation() {
                 <Link
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
                  to="/warenkorb">
-                  <i className="fab fa-pinterest text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Warenkorb | {cartLength}</span>
+                  <i className="text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Warenkorb | {cartLength}</span>
                 </Link>
               </li>
             </ul>

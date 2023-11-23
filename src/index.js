@@ -7,7 +7,7 @@ import {ApolloProvider, ApolloClient, createHttpLink, InMemoryCache} from "@apol
 import { BrowserRouter } from 'react-router-dom';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:8000/graphql/'
+  uri: 'https://coral-app-2rbal.ondigitalocean.app/graphql/'
 })
 
 const client = new ApolloClient({

@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() => {
     window
-      .fetch('http://localhost:8000/graphql/', {
+      .fetch('https://coral-app-2rbal.ondigitalocean.app/graphql/', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

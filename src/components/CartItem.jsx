@@ -14,7 +14,7 @@ export default function CartItem({item, deleted}) {
     let currentDate = new Date(item.startDate);
     while (currentDate <= new Date(item.endDate)) {
       if (currentDate.getDay() > 2 || currentDate.getDay() < 1) {
-        price += item.pricePerDay;
+        price += parseInt(item.pricePerDay);
       } else {
         price += 0;
       }
