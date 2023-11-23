@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import Article from '../components/Article'
-import Filter from '../components/Filter';
 import Select from "react-select";
 
 export default function OverallPage({data, bookings}) {
@@ -18,7 +17,7 @@ export default function OverallPage({data, bookings}) {
     sizes.forEach((size) => endSizes.push({value: size, label: size}))
     setSizeOption(endSizes);
     setSki(data.filter(item => parseInt(item.category.id) === 1))
-  }, [])
+  }, [data])
 
   useEffect(() => {
     let array = [];
@@ -30,10 +29,11 @@ export default function OverallPage({data, bookings}) {
             array.push(item);
           }
         })
+        return true;
       })
       setSki(array);
     }
-  }, [filter]);
+  }, [filter, data]);
 
   if (!data) return "Loading...";
 

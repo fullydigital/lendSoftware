@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import Navigation from "./Navigation";
 import CartItem from "./CartItem";
 import {gql, useMutation} from "@apollo/client";
 import {useNavigate} from "react-router-dom";
@@ -25,18 +24,15 @@ export default function ShoppingCart() {
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   let actualCart = localStorage.key('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
-  const [mutation, {data, loading, error}] = useMutation(BOOK_CART);
+  const [mutation] = useMutation(BOOK_CART);
   const navigate = useNavigate();
   const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
     let price = 0;
     actualCart.forEach((item) => {
-      const diffTime = Math.abs(new Date(item.startDate) - new Date(item.endDate));
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       let currentDate = new Date(item.startDate);
       while (currentDate <= new Date(item.endDate)) {
-        console.log(currentDate.getDay());
         if (currentDate.getDay() > 2 || currentDate.getDay() < 1) {
           price += item.pricePerDay;
         } else {
@@ -44,7 +40,6 @@ export default function ShoppingCart() {
         }
         currentDate.setDate(currentDate.getDate() + 1);
       }
-      // price += item.pricePerDay * diffDays;
     })
     setFinalPrice(price);
   }, [actualCart]);
@@ -55,6 +50,7 @@ export default function ShoppingCart() {
 
   useEffect(() => {
     actualCart = JSON.parse(localStorage.getItem('cart'));
+    return true;
   }, [deleted]);
 
   return (

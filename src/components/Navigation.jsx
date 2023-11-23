@@ -5,7 +5,7 @@ export default function Navigation() {
   const [cartLength, setCartLength] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    setInterval(() => {
       setCartLength(localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')).length : 0)
     }, 2000);
   }, [])

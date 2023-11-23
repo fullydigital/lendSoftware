@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Page, Text, View, Document, StyleSheet} from "@react-pdf/renderer";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 

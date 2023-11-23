@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import Select from "react-select";
-import DatePicker from "react-datepicker";
 
 export default function CartItem({item, deleted}) {
   const [finalPrice, setFinalPrice] = useState(0);
@@ -23,7 +21,7 @@ export default function CartItem({item, deleted}) {
       currentDate.setDate(currentDate.getDate() + 1);
     }
     setFinalPrice(price);
-  }, [])
+  }, [item])
 
   const deleteItem = () => {
     let items = JSON.parse(localStorage.getItem('cart'));
@@ -32,6 +30,7 @@ export default function CartItem({item, deleted}) {
       if (article.id === item.id) {
         items.splice(index, 1);
       }
+      return true;
     })
     items = JSON.stringify(items);
     localStorage.setItem('cart', items);

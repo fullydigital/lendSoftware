@@ -27,10 +27,11 @@ export default function Article({item, bookings}) {
             array.push(new Date(currentDate.getDate() - 1))
           }
         }
+        return true;
       }
     )
     setDeleteStartDate(array);
-  }, [article])
+  }, [article, bookings])
 
   const handleChange = (range) => {
     const [startDate, endDate] = range;
