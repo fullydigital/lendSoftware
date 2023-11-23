@@ -23,7 +23,8 @@ export default function ShoppingCart() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  let actualCart = localStorage.key('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
+  // let actualCart = localStorage.key('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
+  const [actualCart, setActualCart] = useState(localStorage.key('cart') ? JSON.parse(localStorage.getItem('cart')) : []);
   const [mutation] = useMutation(BOOK_CART);
   const navigate = useNavigate();
   const [deleted, setDeleted] = useState(false);
@@ -49,7 +50,7 @@ export default function ShoppingCart() {
   }
 
   useEffect(() => {
-    actualCart = JSON.parse(localStorage.getItem('cart'));
+    setActualCart(JSON.parse(localStorage.getItem('cart')));
     return true;
   }, [deleted]);
 
