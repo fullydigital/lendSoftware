@@ -23,7 +23,6 @@ export default function ShoppingCart() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  // let actualCart = localStorage.key('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
   const [actualCart, setActualCart] = useState(localStorage.key('cart') ? JSON.parse(localStorage.getItem('cart')) : []);
   const [mutation] = useMutation(BOOK_CART);
   const navigate = useNavigate();
@@ -34,6 +33,7 @@ export default function ShoppingCart() {
     actualCart.forEach((item) => {
       let currentDate = new Date(item.startDate);
       while (currentDate <= new Date(item.endDate)) {
+        console.log(currentDate.getDay());
         if (currentDate.getDay() > 2 || currentDate.getDay() < 1) {
           price += item.pricePerDay;
         } else {
@@ -50,8 +50,7 @@ export default function ShoppingCart() {
   }
 
   useEffect(() => {
-    setActualCart(JSON.parse(localStorage.getItem('cart')));
-    return true;
+    setActualCart(JSON.parse(localStorage.getItem('cart')))
   }, [deleted]);
 
   return (
@@ -86,7 +85,6 @@ export default function ShoppingCart() {
                 mutation({variables: {firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, startDate: startDate, endDate: endDate, bookingDate: new Date().toISOString().slice(0, 10), size: item.id}})
                 localStorage.removeItem('cart');
                 navigate("/thank-you")
-                return true;
               })}
       >Buchen</button>
     </div>
