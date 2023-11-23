@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 
 export default function Article({item, bookings}) {
-  const [size, setSize] = useState(item.sizes[0]);
+  const [size] = useState(item.sizes[0]);
   const [deleteStartDate, setDeleteStartDate] = useState([]);
   let cart = JSON.parse(localStorage.getItem('cart')) ? JSON.parse(localStorage.getItem('cart')) : [];
 

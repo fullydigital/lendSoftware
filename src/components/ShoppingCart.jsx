@@ -85,6 +85,7 @@ export default function ShoppingCart() {
                 mutation({variables: {firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, startDate: startDate, endDate: endDate, bookingDate: new Date().toISOString().slice(0, 10), size: item.id}})
                 localStorage.removeItem('cart');
                 navigate("/thank-you")
+                return true;
               })}
       >Buchen</button>
     </div>
