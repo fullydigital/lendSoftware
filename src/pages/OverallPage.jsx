@@ -1,9 +1,47 @@
-import React from 'react';
-import { Ski } from '../data/ski';
+import React, { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
-import OverviewItem from "../components/OverviewItem";
+import Article from '../components/Article'
+import Filter from '../components/Filter';
+import Select from "react-select";
 
-export default function OverallPage() {
+export default function OverallPage({data, bookings}) {
+  const [filter, setFilter] = useState(null);
+  const [sizeOption, setSizeOption] = useState([]);
+  const [ski, setSki] = useState([]);
+
+  useEffect(() => {
+    let sizes = [];
+    let endSizes = [];
+    const ski = data.filter(item => parseInt(item.category.id) === 1);
+    Object.entries(ski).forEach(([key, value]) => value.sizes.forEach((item) => sizes.push(item.label)));
+    sizes = [...new Set(sizes)].slice().sort((a, b) => a - b);
+    sizes.forEach((size) => endSizes.push({value: size, label: size}))
+    setSizeOption(endSizes);
+    setSki(data.filter(item => parseInt(item.category.id) === 1))
+  }, [])
+
+  useEffect(() => {
+    let array = [];
+    let newArray = data.filter(item => parseInt(item.category.id) === 1)
+    if (filter) {
+      newArray.map((item) => {
+        item.sizes.forEach((size) => {
+          if (size.label === filter.label) {
+            array.push(item);
+          }
+        })
+      })
+      setSki(array);
+    }
+  }, [filter]);
+
+  if (!data) return "Loading...";
+
+  let bikes = data.filter(item => parseInt(item.category.id) === 2)
+  let accesories = data.filter(item => parseInt(item.category.id) === 3)
+
+
+
   return (
     <>
       <div className="w-10/12 text-left mx-auto mt-12">
@@ -17,15 +55,24 @@ export default function OverallPage() {
       <img className="w-full h-auto mt-10" src={require('../assets/bannerbikever.webp')} alt="Personen beim Fahrradfahren"/>
       <div className="mt-16">
         <h2 className="uppercase font-bold text-2xl">Bike-Rent</h2>
-      <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32">
-        {Ski.map((item) => (<OverviewItem item={item} />))}
+      <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
+        {bikes.map((item) => (<Article item={item} key={item.id} />))}
       </div>
       </div>
       <img className="w-full h-auto mt-10" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
       <div className="mt-16">
         <h2 className="uppercase font-bold text-2xl">Ski-Rent</h2>
-        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32">
-          {Ski.map((item) => (<OverviewItem item={item} />))}
+        <p className='mt-10 mb-4 font-semibold'>Größe wählen</p>
+        <Select className="w-4/6 md:w-1/3 lg:w-1/4 mx-auto" value={sizeOption.value} onChange={setFilter} options={sizeOption}/>
+        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap lg:gap-2 mb-32">
+          {ski.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
+        </div>
+      </div>
+      <img className="w-full h-auto mt-10" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
+      <div className="mt-16">
+        <h2 className="uppercase font-bold text-2xl">Zubehör</h2>
+        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
+          {accesories.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
         </div>
       </div>
     </>
