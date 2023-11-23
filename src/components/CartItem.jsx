@@ -45,10 +45,10 @@ export default function CartItem({item, deleted}) {
       <div className="flex flex-col text-left leading-8">
         <p><span className="font-bold text-xl">{item.name}</span></p>
         <p><span className="font-semibold">Größe:</span> {item.label}</p>
-        <p><span className="font-semibold">Preis pro Tag:</span> {item.pricePerDay} €</p>
+        <p><span className="font-semibold">Preis pro Tag:</span> {parseInt(item.pricePerDay)} €</p>
         <p><span className="font-semibold">Von:</span> {startDate}</p>
         <p><span className="font-semibold">Bis:</span> {endDate}</p>
-        <p><span className="font-semibold">Tage gebucht:</span> {diffDays}</p>
+        <p><span className="font-semibold">Tage gebucht:</span> {diffDays+1}</p>
         <p><span className="font-semibold">Gesamtpreis:</span> {finalPrice} €</p>
       </div>
       <button className="bg-red-600 mt-6 py-1 lg:h-10 lg:px-4 lg:absolute lg:right-4 lg:bottom-4" onClick={() => {deleteItem(); deleted()}}><span className="text-white">Löschen</span></button>

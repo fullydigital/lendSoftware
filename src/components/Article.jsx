@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 export default function Article({item, bookings}) {
   const [size] = useState(item.sizes[0]);
   const [deleteStartDate, setDeleteStartDate] = useState([]);
+  const [booked, setBooked] = useState(false);
   let cart = JSON.parse(localStorage.getItem('cart')) ? JSON.parse(localStorage.getItem('cart')) : [];
 
   const [article, setArticle] = useState({
@@ -41,6 +42,10 @@ export default function Article({item, bookings}) {
     const handleClick = () => {
       cart.push(article);
       localStorage.setItem('cart', JSON.stringify(cart));
+      setBooked(true);
+      setTimeout(() => {
+        setBooked(false);
+      }, 1000)
     }
 
     if (!item) return "Loading...";
@@ -77,7 +82,7 @@ export default function Article({item, bookings}) {
             minDate={new Date()}
           />
         </div>
-        <button onClick={handleClick} className="bg-red-600 text-white w-4/6 py-3">Buchen</button>
+        <button onClick={handleClick} className="bg-red-600 text-white w-4/6 py-3">{booked ? 'Im Warenkorb' : 'Buchen'}</button>
       </div>
     )
 }
