@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import Invoice from '../components/Invoice';
 
 
 export default function AdminPage() {
