@@ -4,8 +4,8 @@ import {gql, useMutation} from "@apollo/client";
 import {useNavigate} from "react-router-dom";
 
 const BOOK_CART = gql`
-    mutation CreateBooking($firstName: String, $lastName: String, $email: String, $phoneNumber: String, $startDate: Date, $endDate: Date, $bookingDate: Date, $size: Int) {
-        createBooking(firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, startDate: $startDate, endDate: $endDate, bookingDate: $bookingDate, sizeId: $size) {
+    mutation CreateBooking($firstName: String, $lastName: String, $email: String, $phoneNumber: String, $startDate: Date, $endDate: Date, $bookingDate: Date, $size: Int, $street: String, $local: String) {
+        createBooking(firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, startDate: $startDate, endDate: $endDate, bookingDate: $bookingDate, sizeId: $size, street: $street, local: $local) {
             id
             email
             firstName
@@ -13,6 +13,8 @@ const BOOK_CART = gql`
             startDate
             endDate
             sizeId
+            street
+            local
         }
     }
 `;
@@ -23,6 +25,8 @@ export default function ShoppingCart() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [street, setStreet] = useState('');
+  const [local, setLocal] = useState('');
   const [actualCart, setActualCart] = useState(localStorage.key('cart') ? JSON.parse(localStorage.getItem('cart')) : []);
   const [mutation] = useMutation(BOOK_CART);
   const navigate = useNavigate();
@@ -69,6 +73,14 @@ export default function ShoppingCart() {
         <input className="border-2 pl-2 py-2" placeholder="Nachname" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
         </section>
         <section className="flex flex-col mb-6">
+          <label className="text-left mb-2 font-semibold">Straße + Hausnummer</label>
+        <input className="border-2 pl-2 py-2" placeholder="Straße, Hausnummer" type="text" value={street} onChange={(e) => setStreet(e.target.value)} />
+        </section>
+        <section className="flex flex-col mb-6">
+          <label className="text-left mb-2 font-semibold">Postleitzahl + Ort</label>
+        <input className="border-2 pl-2 py-2" placeholder="Postleitzahl, Ort" type="text" value={local} onChange={(e) => setLocal(e.target.value)} />
+        </section>
+        <section className="flex flex-col mb-6">
           <label className="text-left mb-2 font-semibold">Email</label>
         <input className="border-2 pl-2 py-2" placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </section>
@@ -82,7 +94,7 @@ export default function ShoppingCart() {
               onClick={() => JSON.parse(localStorage.getItem('cart')).map((item) => {
                 const startDate = new Date(item.startDate).toISOString().slice(0, 10);
                 const endDate = new Date(item.endDate).toISOString().slice(0, 10);
-                mutation({variables: {firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, startDate: startDate, endDate: endDate, bookingDate: new Date().toISOString().slice(0, 10), size: item.id}})
+                mutation({variables: {firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, startDate: startDate, endDate: endDate, bookingDate: new Date().toISOString().slice(0, 10), size: item.id, street: street, local: local}})
                 localStorage.removeItem('cart');
                 navigate("/thank-you")
                 return true;

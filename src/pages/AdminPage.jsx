@@ -1,26 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import Invoice from '../components/Invoice';
+import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 
 
 export default function AdminPage() {
   const [bookings, setBookings] = useState(null);
-
-  const downloadPDF = () => {
-    const capture = document.querySelector('.receipt');
-    html2canvas(capture).then((canvas) => {
-      const imgData = canvas.toDataURL('img/png');
-      const doc = new jsPDF('p', 'mm', 'a4');
-      const componentWidth = doc.internal.pageSize.getWidth();
-      const componentHeight = doc.internal.pageSize.getHeight();
-      doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
-      doc.save('receipt.pdf');
-    })
-  }
+  const [showInvoice, setShowInvoice] = useState(false);
+  const [itemId, setItemId] = useState(null);
 
   const query = `
     {
       bookings {
+        id
         firstName
         lastName
         email
@@ -30,10 +22,14 @@ export default function AdminPage() {
           articleSet {
             name
           }
+          serialNumber
+          pricePerDay
         }
         bookingDate
         startDate
         endDate
+        street
+        local
       }
     }
   `;
@@ -52,40 +48,80 @@ export default function AdminPage() {
         if (errors) {
           console.error(errors);
         }
-        setBookings(data.bookings);
+        if (data.bookings.length !== 0) {
+          setBookings(data.bookings)
+        };
       })
   }, [query]);
 
-  if (!bookings) return "Loading...";
+  const handleInvoice = (id) => {
+    bookings.map((item) => {
+      if (id === item.id) {
+        setItemId(item);
+      }
+      return item;
+    })
+  }
+
+  if (!bookings) return "Keine Einträge vorhanden";
 
   return (
     <div>
     <div className="w-11/12 ml-4 mt-12 mb-20">
-      <table className="table-auto border-collapse border-2 actual-receipt">
-        <thead className="h-10 bg-red-200" key={"header"}>
+    <Table className="table-auto border-collapse border-2" key={1}>
+      <Thead>
+      <Tr>
           {Object.keys(bookings[0]).map((key) => (
             <>
-            <th className="border-2">{key}</th>
-            {key === 'size' ? <th className="border-2">Artikelname</th> : null}
-            </>
-          ))}
-          <th>Rechnung</th>
-        </thead>
-        {bookings.map((item) => (
-          <>
-          <tr key={item.id} className="">
+              <Th className="border-2">{key}</Th>
+              {key === 'size' ? <Th className="border-2">Artikelname</Th> : null}
+              </>
+              ))}
+          <Th>Rechnung</Th>
+              </Tr>
+      </Thead>
+      <Tbody>
+      {bookings.map((item) => (
+          <Tr key={item.id}>
             {Object.values(item).map((val) => (
               <>
-              <td className="border-2 align-middle mx-auto h-14 px-8">{val.label ? val.label : val.articleSet ? val.articleSet[0].name : val}</td>
-              {val.label ? <td className="border-2 mx-auto px-8">{val.articleSet[0].name}</td> : null}
+              <Td className="border-2">{val.label ? val.label : val.articleSet ? val.articleSet[0].name : val}</Td>
+              {val.label ? <Td className="border-2">{val.articleSet[0].name}</Td> : null}
               </>
             ))}
-            <td className="border-2 px-8"><button className="bg-red-600 py-1 px-2 rounded-lg text-white" onClick={downloadPDF}>Rechnung</button></td>
-          </tr>
-          </>
+          <Td className="border-2"><button className="bg-red-600 py-1 px-2 rounded-lg text-white" onClick={() => {handleInvoice(item.id); setShowInvoice(!showInvoice)}}>Rechnung</button></Td>
+          </Tr>
         ))}
-      </table>
+      </Tbody>
+    </Table>
+      {/* <Table className="table-auto border-collapse border-2">
+        <Thead className="h-10 bg-red-200">
+          <Tr>
+          {Object.keys(bookings[0]).map((key) => (
+            <>
+              <Th className="border-2">{key}</Th>
+              {key === 'size' ? <Th className="border-2">Artikelname</Th> : null}
+              </>
+              ))}
+          <Th>Rechnung</Th>
+              </Tr>
+        </Thead>
+        <Tbody>
+        {bookings.map((item) => (
+          <Tr key={item.id}>
+            {Object.values(item).map((val) => (
+              <>
+              <Td className="border-2">{val.label ? val.label : val.articleSet ? val.articleSet[0].name : val}</Td>
+              {val.label ? <Td className="border-2">{val.articleSet[0].name}</Td> : null}
+              </>
+            ))}
+          <Td className="border-2"><button className="bg-red-600 py-1 px-2 rounded-lg text-white" onClick={() => {handleInvoice(item.id); setShowInvoice(!showInvoice)}}>Rechnung</button></Td>
+          </Tr>
+        ))}
+          </Tbody>
+      </Table> */}
     </div>
+    {showInvoice ? <Invoice itemId={itemId} /> : null}
     </div>
   )
 }

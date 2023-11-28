@@ -1,30 +1,67 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react';
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
-export default function Invoice() {
+export default function Invoice({itemId}) {
+  const [article] = useState(itemId);
+  const [price, setPrice] = useState(0);
+
+  var str = "" + article.id;
+  var pad = "0000";
+  var ans = pad.substring(0, pad.length - str.length) + str;
+
+  useEffect(() => {
+    let price = 0;
+    let currentDate = new Date(article.startDate);
+    while (currentDate <= new Date(article.endDate)) {
+      if (currentDate.getDay() > 2 || currentDate.getDay() < 1) {
+        price += parseInt(article.size.pricePerDay);
+      } else {
+        price += 0;
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    setPrice(price);
+  }, [article])
+
+  const downloadPDF = () =>{
+    const capture = document.querySelector('.receipt');
+    html2canvas(capture).then((canvas)=>{
+      const imgData = canvas.toDataURL('img/png');
+      const doc = new jsPDF('p', 'mm', 'a4');
+      const componentWidth = doc.internal.pageSize.getWidth();
+      const componentHeight = doc.internal.pageSize.getHeight();
+      doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
+      doc.save('receipt.pdf');
+    })
+  }
+
+  if(!article) <p>Loading...</p>
 
   return (
-    <div>
-        <div style={{width: '1000px'}}>
-          <div className="w-full receipt">
+    <div className="wrapper">
+
+        <div style={{width: 650, borderWidth: 1, marginLeft: 'auto', marginRight: 'auto'}}>
+          <div className="receipt pt-10 px-10">
           <div>
             <img src={require('../assets/SportWeberLogoStartseite.png')} alt="Firmenlogo" className="" />
           </div>
-          <div className="flex flex-row gap-80 mt-6">
+          <div className="flex flex-row gap-28 mt-6">
             <div>
-              <p className="text-left">Nürnberger Straße 51, 91220 Schnaittach</p>
-              <section className="h-0.5 w-96 bg-black" />
-              <div className="mt-6 text-left">
-                <p>Helmke Tobias</p>
-                <p>Schulstraße 13</p>
-                <p>91230 Happurg</p>
+              <p className="text-left text-[10px]">Nürnberger Straße 51, 91220 Schnaittach</p>
+              <section className="h-[0.5px] w-60 bg-black mt-1" />
+              <div className="mt-3 text-left text-xs">
+                <p>{article.lastName} {article.firstName}</p>
+                <p>{article.street}</p>
+                <p>{article.local}</p>
                 <p>DE</p>
               </div>
-              <div className="mt-6 text-left">
-                <p>Reservierungsnummer: V7HWLP</p>
-                <p className="font-semibold">Zeitraum: 25.03.2023 - 29.03.2023</p>
+              <div className="mt-6 text-left text-xs">
+                <p>Reservierungsnummer: {ans}</p>
+                <p className="font-semibold">Zeitraum: {new Date(article.startDate).toLocaleDateString()} - {new Date(article.endDate).toLocaleDateString()}</p>
               </div>
             </div>
-            <div className="mt-4">
+            <div className="mt-1 text-[10px]">
               <div className="text-left">
                 <p>Nürnberger Straße 51</p>
                 <p>91220 Schnaittach</p>
@@ -36,76 +73,77 @@ export default function Invoice() {
               </div>
             </div>
           </div>
-          <div className="font-semibold text-left mt-14">
-            <p>Mietvertrag zwischen Sportweber-Schnaittach und Helmke Tobias</p>
+          <div className="font-semibold text-xs text-left mt-8">
+            <p>Mietvertrag zwischen Sportweber-Schnaittach und {article.lastName} {article.firstName}</p>
           </div>
-          <div className="flex flex-row mt-10">
+          <div className="flex flex-row mt-10 text-xs">
               <section className="basis-1/12 text-left">
                 <p>Pos.</p>
-                <section className="h-0.5 bg-black mt-1 mb-2" />
+                <section className="h-[0.5px] bg-black mt-2 mb-2" />
                 <p>1</p>
               </section>
-            <section className="basis-2/12 text-left">
+            <section className="basis-6/12 text-left">
               <p>Beschreibung</p>
-              <section className="h-0.5 bg-black mt-1 mb-2" />
-              <p>Stöckli Laser GS 172cm Racecaver</p>
-              <p className="font-light">Stöckli Laser GS 172cm Racecaver</p>
-              <p className="font-light">ID: 172/1024679 Bezeichnung: 172cm</p>
+              <section className="h-[0.5px] bg-black mt-2 mb-2" />
+              <p>{article.size.articleSet[0].name}, Größe: {article.size.label}</p>
+              <p className="font-light text-[10px]">{article.size.articleSet[0].name}</p>
+              <p className="font-light text-[10px]">ID: {article.size.serialNumber} Bezeichnung: {article.size.label}cm</p>
             </section>
             <section className="basis-1/12">
               <p>Anzahl</p>
-              <section className="h-0.5 bg-black mt-1 mb-2" />
+              <section className="h-[0.5px] bg-black mt-2 mb-2" />
               <p className="ml-12">1</p>
             </section>
-            <section className="basis-1/12">
+            <section className="basis-2/12">
               <p>USt.-Satz</p>
-              <section className="h-0.5 bg-black mt-1 mb-2" />
+              <section className="h-[0.5px] bg-black mt-2 mb-2" />
               <p>19,00%</p>
             </section>
             <section className="basis-1/12 text-right">
               <p>Gesamtpreis</p>
-              <section className="h-0.5 bg-black mt-1 mb-2" />
-              <p>60,00€</p>
+              <section className="h-[0.5px] bg-black mt-2 mb-2" />
+              <p>{parseFloat(price).toFixed(2)}€</p>
             </section>
           </div>
-          <div className="flex flex-row mt-20">
-            <section className="basis-1/12 text-left">
+          <div className="flex flex-row mt-20 text-xs">
+            <section className="basis-1/12 text-left mr-2">
               <p>Bezahlt</p>
-              <p>0,00€</p>
+              <p>0.00€</p>
             </section>
-            <section className="text-left basis-1/12">
+            <section className="text-left basis-1/12 mr-2">
               <p>Offen</p>
-              <p>60,00€</p>
+              <p>{parseFloat(price).toFixed(2)}€</p>
             </section>
-            <section className="text-left basis-1/12">
+            <section className="text-left basis-1/12 mr-2">
               <p>Ust.</p>
-              <p>9,58€</p>
+              <p>{(parseFloat(price/1.19)*0.19).toFixed(2)}€</p>
             </section>
-            <section className="basis-1/12 text-left">
+            <section className="basis-1/12 text-left mr-2">
               <p>Netto</p>
-              <p>50,42€</p>
+              <p>{parseFloat(price/1.19).toFixed(2)}€</p>
             </section>
             <section className="text-right">
-              <section className="h-2 bg-black mb-4 w-80" />
-              <p>Rechnungsbetrag: 60,00€</p>
+              <section className="h-0.5 bg-black mb-2 w-64 ml-20" />
+              <p>Rechnungsbetrag: {parseFloat(price).toFixed(2)}€</p>
             </section>
           </div>
-          <div className="mt-20 flex flex-row">
-            <section className="basis-2/12 text-left">
-              <section className="h-0.5 bg-black w-11/12" />
+          <div className="mt-20 flex flex-row text-[10px] pb-20">
+            <section className="basis-4/12 text-left">
+              <section className="h-[0.5px] bg-black w-11/12" />
               <p>(Datum)</p>
             </section>
-            <section className="basis-2/12 text-left">
-              <section className="h-0.5 bg-black w-11/12" />
+            <section className="basis-4/12 text-left">
+              <section className="h-[0.5px] bg-black w-11/12" />
               <p>(Mieter)</p>
             </section>
-            <section className="basis-2/12 text-left">
-              <section className="h-0.5 bg-black" />
+            <section className="basis-4/12 text-left">
+              <section className="h-[0.5px] bg-black" />
               <p>(Vermieter)</p>
             </section>
           </div>
         </div>
         </div>
+      <button onClick={downloadPDF}>Download</button>
     </div>
   )
 }

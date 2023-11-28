@@ -1,58 +1,193 @@
-import React, {useState} from 'react'
-import Select from "react-select";
-import DatePicker from "react-datepicker";
+const [loader, setLoader] = useState(false);
 
-export default function Article({item}) {
-  const [size, setSize] = useState(item.sizes[0]);
-  let cart = JSON.parse(localStorage.getItem('cart')) ? JSON.parse(localStorage.getItem('cart')) : [];
-
-  const [article, setArticle] = useState({
-    endDate: new Date(),
-    startDate: new Date(),
-    size: size.id
-  })
-
-  const handleChange = (range) => {
-    const [startDate, endDate] = range;
-    setArticle({...article, startDate: startDate, endDate: endDate, name: item.name, image: item.image})
-
-    const handleClick = () => {
-      cart.push(article);
-      localStorage.setItem('cart', JSON.stringify(cart));
-    }
-
-    if (!item) return "Loading...";
-
-    return (
-      <div className="mt-10 border-2 w-5/6 mx-auto py-10 lg:w-5/12 xl:w-3/12">
-        <img className="w-52 h-52 mx-auto mb-6 object-cover" src={require('../assets/bannskirent.webp')}
-             alt="Bild von dem Objekt"/>
-        <div className="flex-col flex mb-4">
-          <p className="mb-2 font-semibold">Artikel:</p>
-          <p>{item.name}</p>
-        </div>
-        <div className="flex-col flex mb-4">
-          <p className="font-semibold mb-2">Größe: </p>
-          <Select className="w-4/6 mx-auto" value={article.size} onChange={setArticle} options={item.sizes}/>
-        </div>
-        <div className="mb-4">
-          <p className="font-semibold mb-2">Preis pro Tag:</p>
-          <p>{size.pricePerDay} €</p>
-        </div>
-        <div className="flex-col flex mb-10">
-          <p className="font-semibold mb-2">Tage wählen:</p>
-          <DatePicker
-            className="border-2 rounded-lg w-4/6 py-3 text-center"
-            selected={article.startDate}
-            onChange={handleChange}
-            startDate={article.startDate}
-            endDate={article.endDate}
-            selectsRange
-            dateFormat="dd.M.yy"
-          />
-        </div>
-        <button onClick={handleClick} className="bg-red-600 text-white w-4/6 py-3">Buchen</button>
-      </div>
-    )
+  const downloadPDF = () =>{
+    const capture = document.querySelector('.actual-receipt');
+    setLoader(true);
+    html2canvas(capture).then((canvas)=>{
+      const imgData = canvas.toDataURL('img/png');
+      const doc = new jsPDF('p', 'mm', 'a4');
+      const componentWidth = doc.internal.pageSize.getWidth();
+      const componentHeight = doc.internal.pageSize.getHeight();
+      doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
+      setLoader(false);
+      doc.save('receipt.pdf');
+    })
   }
-}
+
+  return (
+    <div className="wrapper">
+
+      <div className="receipt-box">
+
+          {/* actual receipt */}
+          <div className="actual-receipt">
+
+            {/* organization logo */}
+            <div className="receipt-organization-logo">
+              <img alt="logo" src={logo} />
+            </div>
+
+            {/* organization name */}
+            <h5>JS SOLUTIONS</h5>
+
+            {/* street address and unit number */}
+            <h6>
+              ABC Street
+              {' '}
+              123
+            </h6>
+
+            {/* city province postal code */}
+            <h6>
+              Karachi
+              {' '}
+              Sindh
+              {' '}
+              75050
+            </h6>
+
+            {/* email-phone-and-website */}
+            <div className="phone-and-website">
+              <p>
+                <a href={`mailto:anwarhamza919@gmail.com`}>
+                  anwarhamza919@gmail.com
+                </a>
+              </p>
+              <p>01234567890</p>
+                  
+              <p>
+                <a
+                  href="https://www.youtube.com/@jsSolutions"
+                  target="blank"
+                >
+                  https://www.youtube.com/@jsSolutions
+                </a>
+              </p>
+                  
+            </div>
+
+            <div className="colored-row first">
+              <span>Payment Method</span>
+              <span>Card Number</span>
+            </div>
+
+            <div className="data-row">
+              <span className="font-weight">CREDIT</span>
+              <span>************4444</span>
+            </div>
+
+            <div className="colored-row">
+              <span>Campaign</span>
+              <span>Amount</span>
+            </div>
+
+            <div className="data-row">
+              <span className="font-weight">Dollar a Day for Sadaqa</span>
+              <span>
+                $
+                {' '}
+                50
+              </span>
+            </div>
+
+            <div className="colored-row">
+              <span>Transaction Details - Donations</span>
+              <span />
+            </div>
+
+            <div className="data-row border-bottom">
+              <span>
+                <span className="font-weight">
+                  MID
+                  :
+                </span>
+                {' '}
+                1234567
+              </span>
+              <span>
+                <span className="font-weight">
+                  Sequence
+                  {' '}
+                  #:
+                </span>
+                {' '}
+                SSSSSSSS
+              </span>
+            </div>
+
+            <div className="data-row border-bottom">
+              <span>
+                <span className="font-weight">
+                  Invoice
+                  {' '}
+                  #:
+                </span>
+                {' '}
+                AX1234ZVB5671234
+              </span>
+              <span>
+                <span className="font-weight">
+                  Created
+                  :
+                </span>
+                {' '}
+                2023-02-14 02:21:37
+              </span>
+            </div>
+            <div className="data-row border-bottom">
+              <span>
+                <span className="font-weight">
+                  Authentication
+                  {' '}
+                  #:
+                </span>
+                {' '}
+                TEST
+              </span>
+              <span>
+                <span className="font-weight">
+                  Batch
+                  {' '}
+                  #:
+                </span>
+                {' '}
+                1234
+              </span>
+            </div>
+            <div className="data-row border-bottom">
+              <span className="font-weight">
+                Transaction:
+                {' '}
+                APPROVED - 00
+              </span>
+              <span />
+            </div>
+            <div className="colored-row">
+              <span>Thank You For Your Generous Donation</span>
+              <span />
+            </div>
+
+          </div>
+          {/* end of actual receipt */}
+
+          {/* receipt action */}
+          <div className="receipt-actions-div">
+            <div className="actions-right">
+              <button
+                className="receipt-modal-download-button"
+                onClick={downloadPDF}
+                disabled={!(loader===false)}
+              >
+                {loader?(
+                  <span>Downloading</span>
+                ):(
+                  <span>Download</span>
+                )}
+
+              </button> 
+            </div>
+          </div>
+
+      </div>
+      
+    </div>
