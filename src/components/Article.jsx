@@ -6,7 +6,7 @@ import Alert from './Alert';
 import ArticleBooked from './ArticleBooked';
 
 export default function Article({item, bookings}) {
-  const [price, setPrice] = useState(item.sizes[0].pricePerDay);
+  const [price] = useState(item.sizes[0].pricePerDay);
   const [deleteStartDate, setDeleteStartDate] = useState([]);
   const [booked, setBooked] = useState(false);
   const [alert, setAlert] = useState(false);
