@@ -27,13 +27,14 @@ export default function ShoppingCart() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [street, setStreet] = useState('');
   const [local, setLocal] = useState('');
-  const [actualCart, setActualCart] = useState(localStorage.key('cart') ? JSON.parse(localStorage.getItem('cart')) : []);
+  const [actualCart, setActualCart] = useState(localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : []);
   const [mutation] = useMutation(BOOK_CART);
   const navigate = useNavigate();
   const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
     let price = 0;
+    if (actualCart) {
     actualCart.forEach((item) => {
       let currentDate = new Date(item.startDate);
       while (currentDate <= new Date(item.endDate)) {
@@ -47,6 +48,7 @@ export default function ShoppingCart() {
       }
     })
     setFinalPrice(price);
+  }
   }, [actualCart]);
 
   const handleDelete = () => {
@@ -61,7 +63,7 @@ export default function ShoppingCart() {
     <div>
       <h2 className="text-4xl font-bold mt-10">Warenkorb</h2>
       <div className="flex flex-col gap-14 w-8/12 mx-auto mt-20">
-        {actualCart.map((item) => <CartItem item={item} key={item.id} deleted={handleDelete} />)}
+        {actualCart ? actualCart.map((item) => <CartItem item={item} key={item.id} deleted={handleDelete} />) : null}
       </div>
       <div className="flex flex-col mt-12 w-8/12 mx-auto lg:w-4/12">
         <section className="flex flex-col mb-6">

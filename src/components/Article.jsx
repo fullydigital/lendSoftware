@@ -2,17 +2,21 @@ import React, {useEffect, useState} from 'react'
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
+import Alert from './Alert';
+import ArticleBooked from './ArticleBooked';
 
 export default function Article({item, bookings}) {
-  const [size] = useState(item.sizes[0]);
+  const [price, setPrice] = useState(item.sizes[0].pricePerDay);
   const [deleteStartDate, setDeleteStartDate] = useState([]);
   const [booked, setBooked] = useState(false);
+  const [alert, setAlert] = useState(false);
+  const [articleBooked, setArticleBooked] = useState(false);
   let cart = JSON.parse(localStorage.getItem('cart')) ? JSON.parse(localStorage.getItem('cart')) : [];
 
   const [article, setArticle] = useState({
     endDate: new Date(),
     startDate: new Date(),
-    size: item.sizes[0].value
+    size: 0
   })
 
   useEffect(() => {
@@ -34,18 +38,46 @@ export default function Article({item, bookings}) {
     setDeleteStartDate(array);
   }, [article, bookings])
 
+  const handleSize = () => {
+    console.log(item);
+    setPrice(item.pricePerDay);
+  }
+
   const handleChange = (range) => {
     const [startDate, endDate] = range;
-    setArticle({...article, startDate: startDate, endDate: endDate, name: item.name, image: item.image})
+    setArticle({...article, startDate: startDate, endDate: endDate, name: item.name, image: item.image, pricePerDay: price})
+    console.log(article);
   }
 
     const handleClick = () => {
-      cart.push(article);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      setBooked(true);
+      if(article.size !== 0) {
+        if(cart.length > 0) {
+          cart.map((item) => {
+            if (item.id !== article.id) {
+              cart.push(article);
+              localStorage.setItem('cart', JSON.stringify(cart))
+              setBooked(true)
+            } else {
+              setArticleBooked(true);
+            }
+            return item;
+          })
+        }
+        else {
+          cart.push(article);
+          localStorage.setItem('cart', JSON.stringify(cart))
+          setBooked(true)
+        }
+      } else {
+        setAlert(true);
+      }
       setTimeout(() => {
         setBooked(false);
-      }, 1000)
+      }, 2000)
+      setTimeout(() => {
+        setAlert(false);
+        setArticleBooked(false);
+      }, 5000)
     }
 
     if (!item) return "Loading...";
@@ -66,7 +98,7 @@ export default function Article({item, bookings}) {
         </div>
         <div className="mb-4">
           <p className="font-semibold mb-2">Preis pro Tag:</p>
-          <p>{size.pricePerDay} €</p>
+          <p>{price} €</p>
         </div>
         <div className="flex-col flex mb-10">
           <p className="font-semibold mb-2">Tage wählen:</p>
@@ -82,6 +114,8 @@ export default function Article({item, bookings}) {
             minDate={new Date()}
           />
         </div>
+        {alert ? <Alert /> : null}
+        {articleBooked ? <ArticleBooked /> : null}
         <button onClick={handleClick} className="bg-red-600 text-white w-4/6 py-3">{booked ? 'Im Warenkorb' : 'Buchen'}</button>
       </div>
     )

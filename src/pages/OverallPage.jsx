@@ -37,8 +37,12 @@ export default function OverallPage({data, bookings}) {
 
   if (!data) return "Loading...";
 
-  let bikes = data.filter(item => parseInt(item.category.id) === 2)
-  let accesories = data.filter(item => parseInt(item.category.id) === 3)
+  // let bikes = data.filter(item => parseInt(item.category.id) === 2)
+  // let accesories = data.filter(item => parseInt(item.category.id) === 3)
+  let helmets = data.filter(item => parseInt(item.category.id) === 5)
+  let sticks = data.filter(item => parseInt(item.category.id) === 6)
+  let shoes = data.filter(item => parseInt(item.category.id) === 7)
+  let kids = data.filter(item => parseInt(item.category.id) === 4)
 
 
 
@@ -52,13 +56,13 @@ export default function OverallPage({data, bookings}) {
         <p className="mb-2">Die angegebenen Leihpreise werden pro Tag berechnet.</p>
         <p className="text-red-600 font-bold">Wir berechnen den Montag und Dienstag nicht, da hier unser Geschäft auch nicht geöffnet ist.</p>
       </div>
-      <img className="w-full h-auto mt-10" src={require('../assets/bannerbikever.webp')} alt="Personen beim Fahrradfahren"/>
+      {/* <img className="w-full h-auto mt-10" src={require('../assets/bannerbikever.webp')} alt="Personen beim Fahrradfahren"/>
       <div className="mt-16">
         <h2 className="uppercase font-bold text-2xl">Bike-Rent</h2>
       <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
         {bikes.map((item) => (<Article item={item} key={item.id} />))}
-      </div>
-      </div>
+      </div> */}
+      {/* </div> */}
       <img className="w-full h-auto mt-10" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
       <div className="mt-16">
         <h2 className="uppercase font-bold text-2xl">Ski-Rent</h2>
@@ -70,9 +74,24 @@ export default function OverallPage({data, bookings}) {
       </div>
       <img className="w-full h-auto mt-10" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
       <div className="mt-16">
-        <h2 className="uppercase font-bold text-2xl">Zubehör</h2>
+        <h2 className="uppercase font-bold text-2xl mt-12">Skistecken</h2>
         <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
-          {accesories.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
+          {sticks.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
+        </div>
+        <h2 className="uppercase font-bold text-2xl mt-12">Skihelme</h2>
+        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
+          {helmets.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
+        </div>
+        <h2 className="uppercase font-bold text-2xl mt-12">Skischuhe</h2>
+        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
+          {shoes.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
+        </div>
+        <img className="w-full h-auto mt-10" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
+        <div className="mt-16">
+        <h2 className="uppercase font-bold text-2xl mt-12">Kinder</h2>
+        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
+          {kids.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
+        </div>
         </div>
       </div>
     </>
