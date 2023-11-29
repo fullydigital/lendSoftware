@@ -38,10 +38,10 @@ export default function Article({item, bookings}) {
     setDeleteStartDate(array);
   }, [article, bookings])
 
-  const handleSize = () => {
-    console.log(item);
-    setPrice(item.pricePerDay);
-  }
+  // const handleSize = () => {
+  //   console.log(item);
+  //   setPrice(item.pricePerDay);
+  // }
 
   const handleChange = (range) => {
     const [startDate, endDate] = range;
