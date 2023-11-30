@@ -92,10 +92,6 @@ export default function Article({item, bookings}) {
           <p className="mb-2 font-semibold">Artikel:</p>
           <p>{item.name}</p>
         </div>
-        <div className="mb-4">
-          <p className="font-semibold mb-2">Beschreibung:</p>
-          <p>{item.description ? item.description : null}</p>
-        </div>
         <div className="flex-col flex mb-4">
           <p className="font-semibold mb-2">Größe: </p>
           <Select className="w-4/6 mx-auto" value={article.size} onChange={setArticle} options={item.sizes}/>
