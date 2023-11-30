@@ -20,6 +20,7 @@ function App() {
         name
         id
         image
+        description
         category {
           categoryName
           id
