@@ -73,7 +73,7 @@ export default function OverallPage({data, bookings}) {
         </div>
       </div>
       <img className="w-full h-auto mt-10" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
-      <div className="mt-16">
+      <div className="mt-16" id="zubehör">
         <h2 className="uppercase font-bold text-2xl mt-12">Skistecken</h2>
         <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
           {sticks.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}

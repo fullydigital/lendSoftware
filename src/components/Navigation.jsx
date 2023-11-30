@@ -48,31 +48,24 @@ export default function Navigation() {
                 </Link>
               </li>
               <li className="nav-item">
+                <a
+                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+                 href="#ski">
+                  <i className="text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Ski</span>
+                </a>
+              </li>
+              <li className="nav-item">
                 <Link
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                 to="/">
-                  <i className="text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Übersicht</span>
+                 to="/#zubehör">
+                  <i className="text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Zubehör</span>
                 </Link>
               </li>
               <li className="nav-item">
                 <Link
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                 to="/">
-                  <i className="text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Übersicht</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                 to="/">
-                  <i className="text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Übersicht</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                 to="/">
-                  <i className="text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Übersicht</span>
+                 to="/#kinder">
+                  <i className="text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Kinder</span>
                 </Link>
               </li>
               <li className="nav-item">
