@@ -6,11 +6,11 @@ import { AUTH_TOKEN } from '../constants.js';
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation(
-    $email: String!,
+    $username: String!,
     $password: String!
   ) {
     tokenAuth(
-      email: $email,
+      username: $username,
       password: $password,
     ) {
       token
@@ -26,7 +26,7 @@ const LoginPage = () => {
 
   const [login] = useMutation(LOGIN_MUTATION, {
     variables: {
-      email: email,
+      username: email,
       password: password
     },
     onCompleted: (data) => {
