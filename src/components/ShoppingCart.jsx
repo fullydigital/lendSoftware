@@ -4,8 +4,8 @@ import {gql, useMutation} from "@apollo/client";
 import {useNavigate} from "react-router-dom";
 
 const BOOK_CART = gql`
-    mutation CreateBooking($firstName: String, $lastName: String, $email: String, $phoneNumber: String, $startDate: Date, $endDate: Date, $bookingDate: Date, $size: Int, $street: String, $local: String) {
-        createBooking(firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, startDate: $startDate, endDate: $endDate, bookingDate: $bookingDate, sizeId: $size, street: $street, local: $local) {
+    mutation CreateBooking($firstName: String, $lastName: String, $email: String, $phoneNumber: String, $startDate: Date, $endDate: Date, $bookingDate: Date, $size: Int, $street: String, $local: String, $note) {
+        createBooking(firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, startDate: $startDate, endDate: $endDate, bookingDate: $bookingDate, sizeId: $size, street: $street, local: $local, note: $note) {
             id
             email
             firstName
@@ -15,6 +15,7 @@ const BOOK_CART = gql`
             sizeId
             street
             local
+            note
         }
     }
 `;
@@ -27,6 +28,7 @@ export default function ShoppingCart() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [street, setStreet] = useState('');
   const [local, setLocal] = useState('');
+  const [note, setNote] = useState('');
   const [actualCart, setActualCart] = useState(localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : []);
   const [mutation] = useMutation(BOOK_CART);
   const navigate = useNavigate();
@@ -90,13 +92,17 @@ export default function ShoppingCart() {
           <label className="text-left mb-2 font-semibold">Telefonnummer</label>
         <input className="border-2 pl-2 py-2" placeholder="Telefonnummer" type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
         </section>
+        <section className="flex flex-col mb-6">
+          <label className="text-left mb-2 font-semibold">Weiteres</label>
+        <textarea className="border-2 pl-2 py-2" placeholder="Weitere Anliegen" type="text" value={note} onChange={(e) => setNote(e.target.value)} />
+        </section>
       </div>
       <p className=" mx-auto w-9/12 font-bold text-xl mt-10 lg:mt-20">Gesamtpreis: {finalPrice} €</p>
       <button className="bg-red-600 px-16 py-3 text-white font-semibold mt-14 mb-40"
               onClick={() => JSON.parse(localStorage.getItem('cart')).map((item) => {
                 const startDate = new Date(item.startDate).toISOString().slice(0, 10);
                 const endDate = new Date(item.endDate).toISOString().slice(0, 10);
-                mutation({variables: {firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, startDate: startDate, endDate: endDate, bookingDate: new Date().toISOString().slice(0, 10), size: item.id, street: street, local: local}})
+                mutation({variables: {firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, startDate: startDate, endDate: endDate, bookingDate: new Date().toISOString().slice(0, 10), size: item.id, street: street, local: local, note: note}})
                 localStorage.removeItem('cart');
                 navigate("/thank-you")
                 return true;
