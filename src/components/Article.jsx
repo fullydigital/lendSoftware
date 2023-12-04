@@ -50,18 +50,25 @@ export default function Article({item, bookings}) {
   }
 
     const handleClick = () => {
+      let isInCart = true;
       if(article.size !== 0) {
         if(cart.length > 0) {
           cart.map((item) => {
             if (item.id !== article.id) {
-              cart.push(article);
-              localStorage.setItem('cart', JSON.stringify(cart))
+              // cart.push(article);
+              // localStorage.setItem('cart', JSON.stringify(cart))
               setBooked(true)
+              isInCart = false;
+              console.log(booked);
             } else {
               setArticleBooked(true);
             }
             return item;
           })
+          if (isInCart === false) {
+            cart.push(article);
+            localStorage.setItem('cart', JSON.stringify(cart))
+          }
         }
         else {
           cart.push(article);
