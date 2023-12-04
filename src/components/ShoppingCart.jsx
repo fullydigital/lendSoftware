@@ -4,7 +4,7 @@ import {gql, useMutation} from "@apollo/client";
 import {useNavigate} from "react-router-dom";
 
 const BOOK_CART = gql`
-    mutation CreateBooking($firstName: String, $lastName: String, $email: String, $phoneNumber: String, $startDate: Date, $endDate: Date, $bookingDate: Date, $size: Int, $street: String, $local: String, $note) {
+    mutation CreateBooking($firstName: String, $lastName: String, $email: String, $phoneNumber: String, $startDate: Date, $endDate: Date, $bookingDate: Date, $size: Int, $street: String, $local: String, $note: String) {
         createBooking(firstName: $firstName, lastName: $lastName, email: $email, phoneNumber: $phoneNumber, startDate: $startDate, endDate: $endDate, bookingDate: $bookingDate, sizeId: $size, street: $street, local: $local, note: $note) {
             id
             email

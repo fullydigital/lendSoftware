@@ -94,32 +94,6 @@ export default function AdminPage() {
         ))}
       </Tbody>
     </Table>
-      {/* <Table className="table-auto border-collapse border-2">
-        <Thead className="h-10 bg-red-200">
-          <Tr>
-          {Object.keys(bookings[0]).map((key) => (
-            <>
-              <Th className="border-2">{key}</Th>
-              {key === 'size' ? <Th className="border-2">Artikelname</Th> : null}
-              </>
-              ))}
-          <Th>Rechnung</Th>
-              </Tr>
-        </Thead>
-        <Tbody>
-        {bookings.map((item) => (
-          <Tr key={item.id}>
-            {Object.values(item).map((val) => (
-              <>
-              <Td className="border-2">{val.label ? val.label : val.articleSet ? val.articleSet[0].name : val}</Td>
-              {val.label ? <Td className="border-2">{val.articleSet[0].name}</Td> : null}
-              </>
-            ))}
-          <Td className="border-2"><button className="bg-red-600 py-1 px-2 rounded-lg text-white" onClick={() => {handleInvoice(item.id); setShowInvoice(!showInvoice)}}>Rechnung</button></Td>
-          </Tr>
-        ))}
-          </Tbody>
-      </Table> */}
     </div>
     {showInvoice ? <Invoice itemId={itemId} /> : null}
     </div>
