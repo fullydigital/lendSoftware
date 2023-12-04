@@ -2,11 +2,18 @@ import React, { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import Article from '../components/Article'
 import Select from "react-select";
+import { useLocation } from 'react-router-dom';
 
 export default function OverallPage({data, bookings}) {
   const [filter, setFilter] = useState(null);
   const [sizeOption, setSizeOption] = useState([]);
   const [ski, setSki] = useState([]);
+  const location = useLocation();
+
+  useEffect(() => {
+    const elementId = location.hash.substring(1);
+    scrollToElement(elementId);
+  }, [location]);
 
   useEffect(() => {
     let sizes = [];
@@ -34,6 +41,14 @@ export default function OverallPage({data, bookings}) {
       setSki(array);
     }
   }, [filter, data]);
+
+  const scrollToElement = (elementId) => {
+    const element = document.getElementById(elementId);
+
+    if (element) {
+      element.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+  }
 
   if (!data) return "Loading...";
 
@@ -63,7 +78,7 @@ export default function OverallPage({data, bookings}) {
         {bikes.map((item) => (<Article item={item} key={item.id} />))}
       </div> */}
       {/* </div> */}
-      <img className="w-full h-auto mt-10" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
+      <img className="w-full h-auto mt-10" id="ski" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
       <div className="mt-16">
         <h2 className="uppercase font-bold text-2xl">Ski-Rent</h2>
         <p className='mt-10 mb-4 font-semibold'>Größe wählen</p>
@@ -72,8 +87,8 @@ export default function OverallPage({data, bookings}) {
           {ski.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
         </div>
       </div>
-      <img className="w-full h-auto mt-10" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
-      <div className="mt-16" id="zubehör">
+      <img className="w-full h-auto mt-10" id="accessoires" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
+      <div className="mt-16">
         <h2 className="uppercase font-bold text-2xl mt-12">Skistecken</h2>
         <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
           {sticks.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
@@ -86,7 +101,7 @@ export default function OverallPage({data, bookings}) {
         <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
           {shoes.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
         </div>
-        <img className="w-full h-auto mt-10" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
+        <img className="w-full h-auto mt-10" id="kinder" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
         <div className="mt-16">
         <h2 className="uppercase font-bold text-2xl mt-12">Kinder</h2>
         <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">

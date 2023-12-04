@@ -7,6 +7,9 @@ import { faBars } from '@fortawesome/free-solid-svg-icons'
 export default function Navigation() {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [cartLength, setCartLength] = useState(0);
+  const targetSki = 'ski';
+  const targetAccessoires = 'accessoires';
+  const targetKids = 'kinder';
 
   useEffect(() => {
     setInterval(() => {
@@ -48,23 +51,23 @@ export default function Navigation() {
                 </Link>
               </li>
               <li className="nav-item">
-                <a
+                <Link
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                 href="#ski">
+                 to={`/#${targetSki}`}>
                   <i className="text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Ski</span>
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
                 <Link
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                 to="/#zubehör">
+                  to={`/#${targetAccessoires}`}>
                   <i className="text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Zubehör</span>
                 </Link>
               </li>
               <li className="nav-item">
                 <Link
                   className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                 to="/#kinder">
+                  to={`/#${targetKids}`}>
                   <i className="text-lg leading-lg text-white opacity-75"></i><span className="ml-2">Kinder</span>
                 </Link>
               </li>
