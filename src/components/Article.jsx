@@ -50,7 +50,6 @@ export default function Article({item, bookings}) {
   }
 
     const handleClick = () => {
-      let isInCart = true;
       if(article.size !== 0) {
         if(cart.length > 0) {
           var checkCart = cart.filter(item => item.id === article.id);
