@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-// import html2canvas from "html2canvas";
-// import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { html2pdf } from 'html2pdf.js';
 
 export default function Invoice({itemId, bookings}) {
@@ -66,27 +66,25 @@ export default function Invoice({itemId, bookings}) {
 // };
 
   const downloadPDF = () => {
-//     const data = document.getElementById('receipt');
-//   html2canvas(data).then((canvas) => {
-//   const imgWidth = 208;
-//   const pageHeight = 295;
-//   const imgHeight = (canvas.height * imgWidth) / canvas.width;
-//   let heightLeft = imgHeight;
-//   let position = 0;
-//   heightLeft -= pageHeight;
-//   const doc = new jsPDF('p', 'mm', 'a4');
-//   doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-//   while (heightLeft >= 0) {
-//     position = heightLeft - imgHeight;
-//     doc.addPage();
-//     doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
-//     heightLeft -= pageHeight;
-//   }
-//   doc.save('Rechnung.pdf');
-// });
+    const data = document.getElementById('receipt');
+  html2canvas(data).then((canvas) => {
+  const imgWidth = 208;
+  const pageHeight = 295;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  let heightLeft = imgHeight;
+  let position = 0;
+  heightLeft -= pageHeight;
+  const doc = new jsPDF('p', 'mm', 'a4');
+  doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+  while (heightLeft >= 0) {
+    position = heightLeft - imgHeight;
+    doc.addPage();
+    doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+    heightLeft -= pageHeight;
+  }
+  doc.save('Rechnung.pdf');
+});
 
-    var doc = document.getElementById('receipt');
-    html2pdf(doc);
 
   }
 
@@ -135,7 +133,8 @@ export default function Invoice({itemId, bookings}) {
 
             {itemArray ? itemArray.map((item, index) => {
               return (
-                <div className="flex flex-row mt-10 text-xs break-before-auto break-after-auto break-inside-avoid">
+                <div className="flex flex-row mt-10 text-xs">
+                  {index === 3 ? <section className='h-52' /> : index === 9 ? <section className='h-60' /> : null}
             <section className="basis-1/12 text-left">
                 <p>Pos.</p>
                 <section className="h-[0.5px] bg-black mt-2 mb-2" />
