@@ -2,12 +2,21 @@ import React, {useEffect, useState} from 'react';
 import Invoice from '../components/Invoice';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
+import DatePicker from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css'
 
 
 export default function AdminPage() {
   const [bookings, setBookings] = useState(null);
   const [showInvoice, setShowInvoice] = useState(false);
   const [itemId, setItemId] = useState(null);
+  const [nameSearch, setNameSearch] = useState(null);
+
+  const [time, setTime] = useState({
+    endDate: new Date(),
+    startDate: new Date(),
+  })
+  
 
   const query = `
     {
@@ -54,6 +63,68 @@ export default function AdminPage() {
       })
   }, [query]);
 
+  const handleSetback = () => {
+    window
+      .fetch('https://coral-app-2rbal.ondigitalocean.app/graphql/', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({query})
+      })
+      .then((response) => response.json())
+      .then(({data, errors}) => {
+        if (errors) {
+          console.error(errors);
+        }
+        if (data.bookings.length !== 0) {
+          setBookings(data.bookings)
+        };
+      })
+  }
+
+  const handleChange = (range) => {
+    const [startDate, endDate] = range;
+    setTime({startDate: startDate, endDate: endDate})
+  }
+
+  const searchForName = () => {
+    var newArray = bookings.filter(item => item.lastName.toLowerCase() === nameSearch.toLowerCase());
+    if (nameSearch === null || nameSearch === '') {
+      window
+      .fetch('https://coral-app-2rbal.ondigitalocean.app/graphql/', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({query})
+      })
+      .then((response) => response.json())
+      .then(({data, errors}) => {
+        if (errors) {
+          console.error(errors);
+        }
+        if (data.bookings.length !== 0) {
+          setBookings(data.bookings)
+        };
+      })
+    } else if (newArray.length > 0) {
+      setBookings(newArray);
+    } else {
+      alert('Dieser Name ist nicht vorhanden!')
+    }
+  }
+
+  const searchForDate = () => {
+    var newArray = bookings.filter((item) => new Date(item.startDate) >= time.startDate && new Date(item.endDate) <= time.endDate)
+    console.log(newArray);
+    if (newArray.length > 0) {
+      setBookings(newArray);
+    } else {
+      alert('Für den Zeitraum sind keine Daten vorhanden!')
+    }
+  }
+
   const handleInvoice = (id) => {
     bookings.map((item) => {
       if (id === item.id) {
@@ -68,6 +139,26 @@ export default function AdminPage() {
   return (
     <div>
     <div className="w-11/12 ml-4 mt-12 mb-20">
+      <p className='font-semibold mb-6'>Filter:</p>
+      <div className='mb-6'>
+        <label className='mr-10'>Nachname:</label>
+      <input onChange={(e) => setNameSearch(e.target.value)} placeholder='Nachname...' type='text' className='py-2 text-left px-10 rounded-lg border-gray-200 border-solid border-2' />
+      <button onClick={searchForName} className='ml-10 bg-red-600 px-4 py-2 rounded-lg text-white'>Suchen</button>
+      </div>
+      <div className='mb-6'>
+        <label className='mr-10'>Datum:</label>
+        <DatePicker
+            className="border-2 rounded-lg py-3 text-center"
+            selected={time.startDate}
+            onChange={handleChange}
+            startDate={time.startDate}
+            endDate={time.endDate}
+            selectsRange
+            dateFormat="dd.M.yy"
+          />
+      <button className='ml-10 bg-red-600 px-4 py-2 rounded-lg text-white' onClick={searchForDate}>Suchen</button>
+      </div>
+      <button className='mb-12 bg-red-600 px-6 py-2 rounded-lg text-white' onClick={handleSetback}>Zurücksetzen</button>
     <Table className="table-auto border-collapse border-2" key={1}>
       <Thead>
       <Tr>
@@ -95,7 +186,7 @@ export default function AdminPage() {
       </Tbody>
     </Table>
     </div>
-    {showInvoice ? <Invoice itemId={itemId} /> : null}
+    {showInvoice ? <Invoice itemId={itemId} bookings={bookings} /> : null}
     </div>
   )
 }

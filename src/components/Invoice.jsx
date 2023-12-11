@@ -2,27 +2,52 @@ import React, {useEffect, useState} from 'react';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-export default function Invoice({itemId}) {
+export default function Invoice({itemId, bookings}) {
   const [article] = useState(itemId);
   const [price, setPrice] = useState(0);
+  const [itemArray, setItemArray] = useState(null);
 
   var str = "" + article.id;
   var pad = "0000";
   var ans = pad.substring(0, pad.length - str.length) + str;
 
   useEffect(() => {
+    var newArray = bookings.filter(item => item.lastName === itemId.lastName && item.firstName === itemId.firstName && item.bookingDate === itemId.bookingDate);
+    setItemArray(newArray);
+  }, [])
+
+  useEffect(() => {
     let price = 0;
-    let currentDate = new Date(article.startDate);
-    while (currentDate <= new Date(article.endDate)) {
+    if (itemArray) {
+    itemArray.map((item) => {
+      let currentDate = new Date(item.startDate);
+      while (currentDate <= new Date(item.endDate)) {
+        if (currentDate.getDay() > 2 || currentDate.getDay() < 1) {
+          price += parseInt(item.size.pricePerDay);
+        } else {
+          price += 0;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      return price;
+    })
+  }
+    setPrice(price);
+  }, [itemArray])
+
+  const calculatePrice = (art) => {
+    let actualPrice = 0;
+    let currentDate = new Date(art.startDate);
+    while (currentDate <= new Date(art.endDate)) {
       if (currentDate.getDay() > 2 || currentDate.getDay() < 1) {
-        price += parseInt(article.size.pricePerDay);
+        actualPrice += parseInt(art.size.pricePerDay);
       } else {
-        price += 0;
+        actualPrice += 0;
       }
       currentDate.setDate(currentDate.getDate() + 1);
     }
-    setPrice(price);
-  }, [article])
+    return actualPrice;
+  }
 
   const downloadPDF = () =>{
     const capture = document.querySelector('.receipt');
@@ -76,18 +101,23 @@ export default function Invoice({itemId}) {
           <div className="font-semibold text-xs text-left mt-8">
             <p>Mietvertrag zwischen Sportweber-Schnaittach und {article.lastName} {article.firstName}</p>
           </div>
-          <div className="flex flex-row mt-10 text-xs">
-              <section className="basis-1/12 text-left">
+          
+
+
+            {itemArray ? itemArray.map((item, index) => {
+              return (
+                <div className="flex flex-row mt-10 text-xs">
+            <section className="basis-1/12 text-left">
                 <p>Pos.</p>
                 <section className="h-[0.5px] bg-black mt-2 mb-2" />
-                <p>1</p>
+                <p>{index+1}</p>
               </section>
             <section className="basis-6/12 text-left">
               <p>Beschreibung</p>
               <section className="h-[0.5px] bg-black mt-2 mb-2" />
-              <p>{article.size.articleSet[0].name}, Größe: {article.size.label}</p>
-              <p className="font-light text-[10px]">{article.size.articleSet[0].name}</p>
-              <p className="font-light text-[10px]">ID: {article.size.serialNumber} Bezeichnung: {article.size.label}cm</p>
+              <p>{item.size.articleSet[0].name ? item.size.articleSet[0].name : null}, Größe: {item.size.label ? item.size.label : null}</p>
+              <p className="font-light text-[10px]">{item.size.articleSet[0].name ? item.size.articleSet[0].name : null}</p>
+              <p className="font-light text-[10px]">ID: {item.size.serialNumber ? item.size.serialNumber : null} Bezeichnung: {item.size.label ? item.size.label : null}cm</p>
             </section>
             <section className="basis-1/12">
               <p>Anzahl</p>
@@ -102,9 +132,18 @@ export default function Invoice({itemId}) {
             <section className="basis-1/12 text-right">
               <p>Gesamtpreis</p>
               <section className="h-[0.5px] bg-black mt-2 mb-2" />
-              <p>{parseFloat(price).toFixed(2)}€</p>
+              <p>{parseFloat(calculatePrice(item)).toFixed(2)} €</p>
             </section>
-          </div>
+            </div>
+              )
+            }) : null}
+
+            
+
+
+
+
+
           <div className="flex flex-row mt-20 text-xs">
             <section className="basis-1/12 text-left mr-2">
               <p>Bezahlt</p>
@@ -143,7 +182,7 @@ export default function Invoice({itemId}) {
           </div>
         </div>
         </div>
-      <button onClick={downloadPDF}>Download</button>
+      <button onClick={downloadPDF} className='mt-10 mb-20 bg-red-600 py-2 px-10 rounded-lg text-white'>Download</button>
     </div>
   )
 }
