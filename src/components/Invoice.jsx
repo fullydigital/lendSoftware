@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+// import html2canvas from "html2canvas";
+// import jsPDF from "jspdf";
 import { html2pdf } from 'html2pdf.js';
 
 export default function Invoice({itemId, bookings}) {
