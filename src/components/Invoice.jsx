@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { html2pdf } from 'html2pdf.js';
 
 export default function Invoice({itemId, bookings}) {
   const [article] = useState(itemId);
@@ -49,27 +50,55 @@ export default function Invoice({itemId, bookings}) {
     return actualPrice;
   }
 
-  const downloadPDF = () =>{
-    const capture = document.querySelector('.receipt');
-    html2canvas(capture).then((canvas)=>{
-      const imgData = canvas.toDataURL('img/png');
-      const doc = new jsPDF('p', 'mm', 'a4');
-      const componentWidth = doc.internal.pageSize.getWidth();
-      const componentHeight = doc.internal.pageSize.getHeight();
-      doc.addImage(imgData, 'PNG', 0, 0, componentWidth, componentHeight);
-      doc.save('receipt.pdf');
-    })
+//   function headerFooterFormatting(doc)
+// {
+//     var totalPages  = doc.internal.getNumberOfPages();
+
+//     for(var i = totalPages; i >= 1; i--)
+//     { //make this page, the current page we are currently working on.
+//         doc.setPage(i);      
+                      
+//         header(doc);
+        
+//         footer(doc, i, totalPages);
+        
+//     }
+// };
+
+  const downloadPDF = () => {
+//     const data = document.getElementById('receipt');
+//   html2canvas(data).then((canvas) => {
+//   const imgWidth = 208;
+//   const pageHeight = 295;
+//   const imgHeight = (canvas.height * imgWidth) / canvas.width;
+//   let heightLeft = imgHeight;
+//   let position = 0;
+//   heightLeft -= pageHeight;
+//   const doc = new jsPDF('p', 'mm', 'a4');
+//   doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+//   while (heightLeft >= 0) {
+//     position = heightLeft - imgHeight;
+//     doc.addPage();
+//     doc.addImage(canvas, 'PNG', 0, position, imgWidth, imgHeight, '', 'FAST');
+//     heightLeft -= pageHeight;
+//   }
+//   doc.save('Rechnung.pdf');
+// });
+
+    var doc = document.getElementById('receipt');
+    html2pdf(doc);
+
   }
 
   if(!article) <p>Loading...</p>
 
   return (
-    <div className="wrapper">
+    <div className="wrapper font-sans">
 
         <div style={{width: 650, borderWidth: 1, marginLeft: 'auto', marginRight: 'auto'}}>
-          <div className="receipt pt-10 px-10">
+          <div className="pt-10 px-10" id="receipt">
           <div>
-            <img src={require('../assets/SportWeberLogoStartseite.png')} alt="Firmenlogo" className="" />
+            <img src={require('../assets/SportWeberLogoStartseite.png')} alt="Firmenlogo" id="Logo" />
           </div>
           <div className="flex flex-row gap-28 mt-6">
             <div>
@@ -106,7 +135,7 @@ export default function Invoice({itemId, bookings}) {
 
             {itemArray ? itemArray.map((item, index) => {
               return (
-                <div className="flex flex-row mt-10 text-xs">
+                <div className="flex flex-row mt-10 text-xs break-before-auto break-after-auto break-inside-avoid">
             <section className="basis-1/12 text-left">
                 <p>Pos.</p>
                 <section className="h-[0.5px] bg-black mt-2 mb-2" />
