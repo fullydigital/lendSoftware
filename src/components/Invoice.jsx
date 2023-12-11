@@ -14,7 +14,7 @@ export default function Invoice({itemId, bookings}) {
   useEffect(() => {
     var newArray = bookings.filter(item => item.lastName === itemId.lastName && item.firstName === itemId.firstName && item.bookingDate === itemId.bookingDate);
     setItemArray(newArray);
-  }, [])
+  }, [bookings, itemId])
 
   useEffect(() => {
     let price = 0;
