@@ -53,22 +53,30 @@ export default function Article({item, bookings}) {
       let isInCart = true;
       if(article.size !== 0) {
         if(cart.length > 0) {
-          cart.map((item) => {
-            if (item.id !== article.id) {
-              // cart.push(article);
-              // localStorage.setItem('cart', JSON.stringify(cart))
-              setBooked(true)
-              isInCart = false;
-              console.log(booked);
-            } else {
-              setArticleBooked(true);
-            }
-            return item;
-          })
-          if (isInCart === false) {
+          var checkCart = cart.filter(item => item.id === article.id);
+          if (checkCart.length > 0) {
+            setArticleBooked(true);
+          } else {
             cart.push(article);
             localStorage.setItem('cart', JSON.stringify(cart))
           }
+
+          // cart.map((item) => {
+          //   if (item.id !== article.id) {
+          //     // cart.push(article);
+          //     // localStorage.setItem('cart', JSON.stringify(cart))
+          //     setBooked(true)
+          //     isInCart = false;
+          //     console.log(booked);
+          //   } else {
+              
+          //   }
+          //   return item;
+          // })
+          // if (isInCart === false) {
+          //   cart.push(article);
+          //   localStorage.setItem('cart', JSON.stringify(cart))
+          // }
         }
         else {
           cart.push(article);
