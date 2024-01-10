@@ -177,7 +177,7 @@ export default function AdminPage() {
             {Object.values(item).map((val) => (
               <>
               <Td className="border-2">{val.label ? val.label : val.articleSet ? val.articleSet[0].name : val}</Td>
-              {val.label ? <Td className="border-2">{val.articleSet[0].name}</Td> : null}
+              {val.label ? <Td className="border-2">{val.articleSet[0].name ? val.articleSet[0].name : null}</Td> : null}
               </>
             ))}
           <Td className="border-2"><button className="bg-red-600 py-1 px-2 rounded-lg text-white" onClick={() => {handleInvoice(item.id); setShowInvoice(!showInvoice)}}>Rechnung</button></Td>
