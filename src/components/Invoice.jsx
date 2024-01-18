@@ -142,9 +142,9 @@ export default function Invoice({itemId, bookings}) {
             <section className="basis-6/12 text-left">
               <p>Beschreibung</p>
               <section className="h-[0.5px] bg-black mt-2 mb-2" />
-              <p>{item.size.articleSet[0].name ? item.size.articleSet[0].name : null}, Größe: {item.size.label ? item.size.label : null}</p>
+              <p>{item.size.articleSet[0].name ? item.size.articleSet[0].name : null}, Größe: {item.size ? item.size.label : null}</p>
               <p className="font-light text-[10px]">{item.size.articleSet[0].name ? item.size.articleSet[0].name : null}</p>
-              <p className="font-light text-[10px]">ID: {item.size.serialNumber ? item.size.serialNumber : null} Bezeichnung: {item.size.label ? item.size.label : null}cm</p>
+              <p className="font-light text-[10px]">ID: {item.size.serialNumber ? item.size.serialNumber : null} Bezeichnung: {item.size ? item.size.label : null}cm</p>
             </section>
             <section className="basis-1/12">
               <p>Anzahl</p>
