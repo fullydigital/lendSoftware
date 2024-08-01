@@ -8,6 +8,7 @@ export default function OverallPage({data, bookings}) {
   const [filter, setFilter] = useState(null);
   const [sizeOption, setSizeOption] = useState([]);
   const [ski, setSki] = useState([]);
+  const [bike, setBike] = useState([]);
   const location = useLocation();
 
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function OverallPage({data, bookings}) {
     sizes.forEach((size) => endSizes.push({value: size, label: size}))
     setSizeOption(endSizes);
     setSki(data.filter(item => parseInt(item.category.id) === 1))
+    setBike(data.filter(item => parseInt(item.category.id) === 2))
   }, [data])
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export default function OverallPage({data, bookings}) {
 
   if (!data) return "Loading...";
 
-  // let bikes = data.filter(item => parseInt(item.category.id) === 2)
+  let bikes = data.filter(item => parseInt(item.category.id) === 2)
   // let accesories = data.filter(item => parseInt(item.category.id) === 3)
   let helmets = data.filter(item => parseInt(item.category.id) === 5)
   let sticks = data.filter(item => parseInt(item.category.id) === 6)
@@ -71,13 +73,14 @@ export default function OverallPage({data, bookings}) {
         <p className="mb-2">Die angegebenen Leihpreise werden pro Tag berechnet.</p>
         <p className="text-red-600 font-bold">Wir berechnen den Montag und Dienstag nicht, da hier unser Geschäft auch nicht geöffnet ist.</p>
       </div>
-      {/* <img className="w-full h-auto mt-10" src={require('../assets/bannerbikever.webp')} alt="Personen beim Fahrradfahren"/>
+      <img className="w-full h-auto mt-10" src={require('../assets/bannerbikever.webp')} alt="Personen beim Fahrradfahren"/>
       <div className="mt-16">
         <h2 className="uppercase font-bold text-2xl">Bike-Rent</h2>
       <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
-        {bikes.map((item) => (<Article item={item} key={item.id} />))}
-      </div> */}
-      {/* </div> */}
+          {bikes.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
+          {bike.map((item) => console.log(item.name))}
+      </div>
+      </div>
       <img className="w-full h-auto mt-10" id="ski" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
       <div className="mt-16">
         <h2 className="uppercase font-bold text-2xl">Ski-Rent</h2>
