@@ -46,7 +46,7 @@ function App() {
   useEffect(() => {
     window
     // .fetch('https://coral-app-2rbal.ondigitalocean.app/graphql/', {
-    .fetch('http://87.166.5.20:8000/graphql/', {
+    .fetch('https://87.166.5.20:8000/graphql/', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
