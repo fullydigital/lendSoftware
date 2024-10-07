@@ -45,7 +45,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     window
-      .fetch('https://coral-app-2rbal.ondigitalocean.app/graphql/', {
+      .fetch('https://14a7-87-166-2-233.ngrok-free.app/graphql/', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export default function AdminPage() {
 
   const handleSetback = () => {
     window
-      .fetch('https://coral-app-2rbal.ondigitalocean.app/graphql/', {
+      .fetch('https://14a7-87-166-2-233.ngrok-free.app/graphql/', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +92,7 @@ export default function AdminPage() {
     var newArray = bookings.filter(item => item.lastName.toLowerCase() === nameSearch.toLowerCase());
     if (nameSearch === null || nameSearch === '') {
       window
-      .fetch('https://coral-app-2rbal.ondigitalocean.app/graphql/', {
+      .fetch('https://14a7-87-166-2-233.ngrok-free.app/graphql/', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
