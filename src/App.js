@@ -47,24 +47,61 @@ function App() {
     window
     // .fetch('https://coral-app-2rbal.ondigitalocean.app/graphql/', {
     // .fetch('https://87.166.5.20:8000/graphql/', {
-    .fetch('https://14a7-87-166-2-233.ngrok-free.app/graphql/', {
+    .fetch('https://backend.sportweber-schnaittach.de/graphql/', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({query})
+        body: JSON.stringify({query}),
+        // mode: 'cors'
       })
       .then((response) => response.json())
       .then(({data, errors}) => {
         if (errors) {
           console.error(errors);
         }
-        setArticles(data.articles);
-        setBookings(data.bookings);
-      })
+        // const articlesWithImages = data.articles.map(article => {
+        //   // Für jedes Bild eine Fetch-Anfrage mit Header machen
+        //   return fetch(article.image, {
+        //     headers: {
+        //       "ngrok-skip-browser-warning": "true"
+        //     },
+        //     cache: "no-store"
+        //   })
+        //   .then(response => response.blob())
+        //   .then(imageBlob => {
+        //     const imageObjectURL = URL.createObjectURL(imageBlob);
+        //     return { ...article, imageSrc: imageObjectURL }; // Bild-URL als 'imageSrc' speichern
+        //   })
+        // })
+
+        // Warte darauf, dass alle Bilder geladen sind
+        // Promise.all(articlesWithImages).then(articlesWithImages => {
+          // articlesWithImages().then(setArticles(articlesWithImages))
+          // setArticles(articlesWithImages)
+          setArticles(data.articles);
+          // setArticles(articlesWithImages); // Setze die Artikel mit den geladenen Bilderna
+          // articlesWithImages()
+          setBookings(data.bookings);
+        // });
+      });
   }, [query]);
 
   if (!articles) return "Loading...";
+
+  // const articlesWithImages = articles.map(article => {
+  //   return fetch(article.image, {
+  //     headers: {
+  //       "ngrok-skip-browser-warning": "true"
+  //     },
+  //     cache: "no-store"
+  //   })
+  //   .then(response => response.blob())
+  //   .then(imageBlob => {
+  //     const imageObjectURL = URL.createObjectURL(imageBlob);
+  //     setArticles({ ...article, imageSrc: imageObjectURL });
+  //   })
+  // })
 
   return (
     <div className="App">

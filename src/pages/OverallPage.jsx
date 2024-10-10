@@ -61,6 +61,22 @@ export default function OverallPage({data, bookings}) {
   let shoes = data.filter(item => parseInt(item.category.id) === 7)
   let kids = data.filter(item => parseInt(item.category.id) === 4)
 
+  // console.log(data)
+
+  // const articlesWithImages = data.map(article => {
+  //   return fetch(article.image, {
+  //     headers: {
+  //       "ngrok-skip-browser-warning": "true"
+  //     },
+  //     cache: "no-store"
+  //   })
+  //   .then(response => response.blob())
+  //   .then(imageBlob => {
+  //     const imageObjectURL = URL.createObjectURL(imageBlob);
+  //     // setArticles({ ...article, imageSrc: imageObjectURL });
+  //     console.log(imageObjectURL)
+  //   })
+  // })
 
 
   return (
@@ -78,7 +94,7 @@ export default function OverallPage({data, bookings}) {
         <h2 className="uppercase font-bold text-2xl">Bike-Rent</h2>
       <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
           {bikes.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
-          {bike.map((item) => console.log(item.name))}
+          {bike.map((item) => console.log(item.image))}
       </div>
       </div>
       <img className="w-full h-auto mt-10" id="ski" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
