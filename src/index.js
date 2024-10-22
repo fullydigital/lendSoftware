@@ -8,7 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 const httpLink = createHttpLink({
   // uri: 'https://coral-app-2rbal.ondigitalocean.app/graphql/'
-  uri: 'https://14a7-87-166-2-233.ngrok-free.app/graphql/'
+  uri: 'https://backend.sportweber-schnaittach.de/graphql/'
 })
 
 const client = new ApolloClient({
