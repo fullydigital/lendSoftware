@@ -117,7 +117,6 @@ export default function AdminPage() {
 
   const searchForDate = () => {
     var newArray = bookings.filter((item) => new Date(item.startDate) >= time.startDate && new Date(item.endDate) <= time.endDate)
-    console.log(newArray);
     if (newArray.length > 0) {
       setBookings(newArray);
     } else {

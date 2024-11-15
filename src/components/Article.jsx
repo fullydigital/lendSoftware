@@ -38,15 +38,9 @@ export default function Article({item, bookings}) {
     setDeleteStartDate(array);
   }, [article, bookings])
 
-  // const handleSize = () => {
-  //   console.log(item);
-  //   setPrice(item.pricePerDay);
-  // }
-
   const handleChange = (range) => {
     const [startDate, endDate] = range;
     setArticle({...article, startDate: startDate, endDate: endDate, name: item.name, image: item.image, pricePerDay: price})
-    console.log(article);
   }
 
     const handleClick = () => {
@@ -59,23 +53,6 @@ export default function Article({item, bookings}) {
             cart.push(article);
             localStorage.setItem('cart', JSON.stringify(cart))
           }
-
-          // cart.map((item) => {
-          //   if (item.id !== article.id) {
-          //     // cart.push(article);
-          //     // localStorage.setItem('cart', JSON.stringify(cart))
-          //     setBooked(true)
-          //     isInCart = false;
-          //     console.log(booked);
-          //   } else {
-              
-          //   }
-          //   return item;
-          // })
-          // if (isInCart === false) {
-          //   cart.push(article);
-          //   localStorage.setItem('cart', JSON.stringify(cart))
-          // }
         }
         else {
           cart.push(article);
@@ -97,7 +74,7 @@ export default function Article({item, bookings}) {
     if (!item) return "Loading...";
 
     return (
-      <div className="mt-10 border-2 w-5/6 mx-auto py-10 lg:w-5/12 xl:w-3/12">
+      <div className="mt-10 border-2 w-5/6 mx-auto py-10 lg:w-5/12 xl:w-3/12 rounded-xl px-3">
         {item.image ? 
         <img className="w-52 h-72 mx-auto mb-6 object-contain" src={item.image}
              alt="Bild von dem Objekt"/> : <img className="w-52 h-52 mx-auto mb-6 object-cover" src={require('../assets/bannskirent.webp')}
@@ -130,7 +107,7 @@ export default function Article({item, bookings}) {
         </div>
         {alert ? <Alert /> : null}
         {articleBooked ? <ArticleBooked /> : null}
-        <button onClick={handleClick} className="bg-red-600 text-white w-4/6 py-3">{booked ? 'Im Warenkorb' : 'Buchen'}</button>
+        <button onClick={handleClick} className="bg-red-600 text-white w-4/6 rounded-lg py-3">{booked ? 'Hinzugefügt' : 'In den Warenkorb'}</button>
       </div>
     )
 }

@@ -55,33 +55,14 @@ export default function OverallPage({data, bookings}) {
   if (!data) return "Loading...";
 
   let bikes = data.filter(item => parseInt(item.category.id) === 2)
-  // let accesories = data.filter(item => parseInt(item.category.id) === 3)
   let helmets = data.filter(item => parseInt(item.category.id) === 5)
   let sticks = data.filter(item => parseInt(item.category.id) === 6)
   let shoes = data.filter(item => parseInt(item.category.id) === 7)
   let kids = data.filter(item => parseInt(item.category.id) === 4)
 
-  // console.log(data)
-
-  // const articlesWithImages = data.map(article => {
-  //   return fetch(article.image, {
-  //     headers: {
-  //       "ngrok-skip-browser-warning": "true"
-  //     },
-  //     cache: "no-store"
-  //   })
-  //   .then(response => response.blob())
-  //   .then(imageBlob => {
-  //     const imageObjectURL = URL.createObjectURL(imageBlob);
-  //     // setArticles({ ...article, imageSrc: imageObjectURL });
-  //     console.log(imageObjectURL)
-  //   })
-  // })
-
-
   return (
     <>
-      <div className="w-10/12 text-left mx-auto mt-12">
+      <div className="w-10/12 text-left mx-auto mt-12 max-w-screen-xl">
         <h1 className="text-center text-2xl font-bold text-gray-900 mb-8">SKI & BIKE RENT - Skier, Skischuhe und Bike Verleih bei Sport Weber</h1>
         <p className="mb-8">Wir kennen das Gefühl nur zu gut, das den Kauf neuer Sportausrüstung begleitet. Das Hin- und Herüberlegen vorher. Das Herzklopfen beim ausprobieren. Die freudige Spannung bei der Fahrt und das unbeschreibliche Glücksgefühl, wenn du noch höher, noch schneller und noch weiter als je zuvor kommst. Trotzdem rechtfertigt nicht jedes Hobby, jeder Ausflug oder jede Urlaubsreise die hohen Anschaffungskosten für Skier, Skieschuhe, Skistöcke und Fahrräder. Machen wir uns nichts vor: Das Leihen von Sportausrüstung ist nicht ganz so aufregend und schüttet womöglich auch weniger Glückshormone aus. Dafür aber schont es Ihren Geldbeutel enorm – und bewahrt Sie vielleicht vor einer teuren Fehlinvestition. Das Ausleihen bei Sport Weber hat zudem noch einen entscheidenden Vorteil:</p>
         <p className="mb-8">Falls Sie sich so sehr in das Leihgerät verlieben, dass Sie es am liebsten gleich behalten möchten, rechnen wir Ihnen innerhalb von sechs Monaten die Leihgebühr auf den Kaufpreis an. Bitte haben jedoch Sie Verständnis dafür, dass wir Ihnen auf diesem Wege nur maximal 10 % des Kaufpreises auf Basis der Leihgebühr erstatten können.</p>
@@ -89,16 +70,8 @@ export default function OverallPage({data, bookings}) {
         <p className="mb-2">Die angegebenen Leihpreise werden pro Tag berechnet.</p>
         <p className="text-red-600 font-bold">Wir berechnen den Montag und Dienstag nicht, da hier unser Geschäft auch nicht geöffnet ist.</p>
       </div>
-      <img className="w-full h-auto mt-10" src={require('../assets/bannerbikever.webp')} alt="Personen beim Fahrradfahren"/>
-      <div className="mt-16">
-        <h2 className="uppercase font-bold text-2xl">Bike-Rent</h2>
-      <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
-          {bikes.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
-          {bike.map((item) => console.log(item.image))}
-      </div>
-      </div>
       <img className="w-full h-auto mt-10" id="ski" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
-      <div className="mt-16">
+      <div className="mt-16 max-w-screen-2xl mx-auto">
         <h2 className="uppercase font-bold text-2xl">Ski-Rent</h2>
         <p className='mt-10 mb-4 font-semibold'>Größe wählen</p>
         <Select className="w-4/6 md:w-1/3 lg:w-1/4 mx-auto" value={sizeOption.value} onChange={setFilter} options={sizeOption}/>
@@ -125,6 +98,13 @@ export default function OverallPage({data, bookings}) {
         <h2 className="uppercase font-bold text-2xl mt-12">Kinder</h2>
         <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
           {kids.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
+        </div>
+        </div>
+        <img className="w-full h-auto mt-10" src={require('../assets/bannerbikever.webp')} alt="Personen beim Fahrradfahren"/>
+        <div className="mt-16">
+          <h2 className="uppercase font-bold text-2xl">Bike-Rent</h2>
+        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
+            {bikes.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
         </div>
         </div>
       </div>
