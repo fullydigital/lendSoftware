@@ -8,7 +8,7 @@ export default function OverallPage({data, bookings}) {
   const [filter, setFilter] = useState(null);
   const [sizeOption, setSizeOption] = useState([]);
   const [ski, setSki] = useState([]);
-  const [bike, setBike] = useState([]);
+  //const [bike, setBike] = useState([]);
   const location = useLocation();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function OverallPage({data, bookings}) {
     sizes.forEach((size) => endSizes.push({value: size, label: size}))
     setSizeOption(endSizes);
     setSki(data.filter(item => parseInt(item.category.id) === 1))
-    setBike(data.filter(item => parseInt(item.category.id) === 2))
+    //setBike(data.filter(item => parseInt(item.category.id) === 2))
   }, [data])
 
   useEffect(() => {
