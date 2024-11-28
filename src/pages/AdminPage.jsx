@@ -8,9 +8,12 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 export default function AdminPage() {
   const [bookings, setBookings] = useState(null);
+  const [sortedBookings, setSortedBookings] = useState([]);
   const [showInvoice, setShowInvoice] = useState(false);
   const [itemId, setItemId] = useState(null);
   const [nameSearch, setNameSearch] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const [time, setTime] = useState({
     endDate: new Date(),
@@ -58,7 +61,9 @@ export default function AdminPage() {
           console.error(errors);
         }
         if (data.bookings.length !== 0) {
-          setBookings(data.bookings)
+          const sorted = [...data.bookings].sort((a, b) => b.id - a.id);
+          setBookings(data.bookings);
+          setSortedBookings(sorted);
         };
       })
   }, [query]);
@@ -78,10 +83,45 @@ export default function AdminPage() {
           console.error(errors);
         }
         if (data.bookings.length !== 0) {
-          setBookings(data.bookings)
+          const sorted = [...data.bookings].sort((a, b) => b.id - a.id);
+          setBookings(data.bookings);
+          setSortedBookings(sorted);
         };
       })
   }
+
+  const getVisiblePages = (currentPage, totalPages, maxVisible = 3) => {
+    const pages = [];
+    const startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    const endPage = Math.min(totalPages, startPage + maxVisible -1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    if (startPage > 1) {
+      if (startPage > 2) pages.unshift("...");
+      pages.unshift(1);
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) pages.push("...");
+      pages.push(totalPages);
+    }
+
+    return pages;
+  }
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  }
+
+  // Pagination: Berechne die Einträge für die aktuelle Seite
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = sortedBookings.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(sortedBookings.length / itemsPerPage);
 
   const handleChange = (range) => {
     const [startDate, endDate] = range;
@@ -133,6 +173,44 @@ export default function AdminPage() {
     })
   }
 
+  const renderPagination = () => {
+    const visiblePages = getVisiblePages(currentPage, totalPages);
+
+    // for (let i = 1; i <= totalPages; i++) {
+    //   pages.push(
+    //     <button
+    //       key={i}
+    //       onClick={() => handlePageChange(i)}
+    //       className={`px-2 py-1 mx-1 rounded ${i === currentPage ? 'bg-red-600 text-white' : 'bg-gray-300'}`}
+    //     >
+    //       {i}
+    //     </button>
+    //   );
+    // }
+    return (
+      <div className="flex justify-center mt-4">
+        {visiblePages.map((page, index) =>
+          typeof page === "number" ? (
+            <button
+              key={index}
+              onClick={() => handlePageChange(page)}
+              className={`px-2 py-1 mx-1 rounded ${
+                page === currentPage ? "bg-red-600 text-white" : "bg-gray-300"
+              }`}
+            >
+              {page}
+            </button>
+          ) : (
+            <span key={index} className="px-2 py-1 mx-1 text-gray-500">
+              ...
+            </span>
+          )
+        )}
+      </div>
+    );
+  
+  };
+
   if (!bookings) return "Keine Einträge vorhanden";
 
   return (
@@ -171,10 +249,11 @@ export default function AdminPage() {
               </Tr>
       </Thead>
       <Tbody>
-      {bookings.map((item) => (
+      {currentItems.map((item) => (
           <Tr key={item.id}>
             {Object.values(item).map((val) => (
               <>
+              {console.log(currentItems)}
               <Td className="border-2">{val.label ? val.label : val.articleSet ? val.articleSet[0].name : val}</Td>
               {val.label ? <Td className="border-2">{val.articleSet[0] ? val.articleSet[0].name : null}</Td> : null}
               </>
@@ -184,6 +263,10 @@ export default function AdminPage() {
         ))}
       </Tbody>
     </Table>
+
+{/* Pagination Controls */}
+        {renderPagination()}
+
     </div>
     {showInvoice ? <Invoice itemId={itemId} bookings={bookings} /> : null}
     </div>
