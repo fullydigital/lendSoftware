@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 export default function OverallPage({data, bookings}) {
   const [filter, setFilter] = useState(null);
   const [sizeOption, setSizeOption] = useState([]);
+  const [category, setCategory] = useState("Racecarver")
   const [ski, setSki] = useState([]);
   //const [bike, setBike] = useState([]);
   const location = useLocation();
@@ -59,6 +60,9 @@ export default function OverallPage({data, bookings}) {
   let sticks = data.filter(item => parseInt(item.category.id) === 6)
   let shoes = data.filter(item => parseInt(item.category.id) === 7)
   let kids = data.filter(item => parseInt(item.category.id) === 4)
+  let racecarver = ski.filter(item => parseInt(item.drivingProfile?.id) === 1);
+  let allround = ski.filter(item => parseInt(item.drivingProfile?.id) === 2);
+  let powder = ski.filter(item => parseInt(item.drivingProfile?.id) === 3);
 
   return (
     <>
@@ -75,9 +79,62 @@ export default function OverallPage({data, bookings}) {
         <h2 className="uppercase font-bold text-2xl">Ski-Rent</h2>
         <p className='mt-10 mb-4 font-semibold'>Größe wählen</p>
         <Select className="w-4/6 md:w-1/3 lg:w-1/4 mx-auto" value={sizeOption.value} onChange={setFilter} options={sizeOption}/>
-        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap lg:gap-2 mb-32">
-          {ski.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
-        </div>
+        <div>
+        <div>
+      {/* Zentral ausgerichteter Selektor */}
+      <div className="flex flex-col lg:flex-row justify-center space-y-4 w-1/3 mx-auto lg:w-full lg:space-x-4 py-4 mb-2 mt-6">
+        <button
+          className={`px-6 h-11 mt-4 py-2 border rounded-lg ${
+            category === "Racecarver" ? "bg-red-600 text-white" : "bg-gray-200 hover:bg-gray-300"
+          }`}
+          onClick={() => setCategory("Racecarver")}
+        >
+          Racecarver
+        </button>
+        <button
+          className={`px-4 py-2 border rounded-lg ${
+            category === "Allroundcarver" ? "bg-red-600 text-white" : "bg-gray-200 hover:bg-gray-300"
+          }`}
+          onClick={() => setCategory("Allroundcarver")}
+        >
+          Allroundcarver
+        </button>
+        <button
+          className={`px-4 py-2 border rounded-lg ${
+            category === "Powder/Allmountain" ? "bg-red-600 text-white" : "bg-gray-200 hover:bg-gray-300"
+          }`}
+          onClick={() => setCategory("Powder/Allmountain")}
+        >
+          Powder/Allmountain
+        </button>
+      </div>
+
+      {/* Artikelanzeige */}
+      <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap lg:gap-2 mb-32">
+        {category === "Racecarver" && (
+          <>
+            {racecarver.map((item) => (
+              <Article item={item} key={item.id} bookings={bookings} />
+            ))}
+          </>
+        )}
+        {category === "Allroundcarver" && (
+          <>
+            {allround.map((item) => (
+              <Article item={item} key={item.id} bookings={bookings} />
+            ))}
+          </>
+        )}
+        {category === "Powder/Allmountain" && (
+          <>
+            {powder.map((item) => (
+              <Article item={item} key={item.id} bookings={bookings} />
+            ))}
+          </>
+        )}
+      </div>
+    </div>
+</div>
       </div>
       <img className="w-full h-auto mt-10" id="accessoires" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
       <div className="mt-16">

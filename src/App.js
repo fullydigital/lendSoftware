@@ -25,6 +25,10 @@ function App() {
           categoryName
           id
         }
+        drivingProfile {
+          name
+          id
+        }
         sizes {
           id
           value

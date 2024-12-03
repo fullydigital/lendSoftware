@@ -33,6 +33,7 @@ export default function ShoppingCart() {
   const [mutation] = useMutation(BOOK_CART);
   const navigate = useNavigate();
   const [deleted, setDeleted] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     let price = 0;
@@ -52,6 +53,41 @@ export default function ShoppingCart() {
     }
   }, [actualCart]);
 
+  const handleBooking = () => {
+    const newErrors = {};
+    if (!firstName) newErrors.firstName = "Vorname ist erforderlich";
+    if (!lastName) newErrors.lastName = "Nachname ist erforderlich";
+    if (!phoneNumber) newErrors.phoneNumber = "Telefonnummer ist erforderlich";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // Keine Fehler - Mutation ausführen
+    JSON.parse(localStorage.getItem('cart')).forEach((item) => {
+      const startDate = new Date(item.startDate).toISOString().slice(0, 10);
+      const endDate = new Date(item.endDate).toISOString().slice(0, 10);
+      mutation({
+        variables: {
+          firstName,
+          lastName,
+          email,
+          phoneNumber,
+          startDate,
+          endDate,
+          bookingDate: new Date().toISOString().slice(0, 10),
+          size: item.id,
+          street,
+          local,
+          note,
+        },
+      });
+      localStorage.removeItem('cart');
+      navigate("/thank-you");
+    });
+  }
+
   const handleDelete = () => {
     setDeleted(!deleted);
   }
@@ -68,12 +104,14 @@ export default function ShoppingCart() {
       </div>
       <div className="flex flex-col mt-12 w-8/12 mx-auto lg:w-4/12">
         <section className="flex flex-col mb-6">
-          <label className="text-left mb-2 font-semibold">Vorname</label>
+          <label className="text-left mb-2 font-semibold">Vorname*</label>
           <input className="border-2 pl-2 py-2" required placeholder="Vorname" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+          {errors.firstName && <p className='text-red-500 text-left mt-2'>{errors.firstName}</p>}
         </section>
         <section className="flex flex-col mb-6">
-          <label className="text-left mb-2 font-semibold">Nachname</label>
+          <label className="text-left mb-2 font-semibold">Nachname*</label>
           <input className="border-2 pl-2 py-2" required placeholder="Nachname" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+          {errors.lastName && <p className='text-red-500 text-left mt-2'>{errors.lastName}</p>}
         </section>
         <section className="flex flex-col mb-6">
           <label className="text-left mb-2 font-semibold">Straße + Hausnummer</label>
@@ -88,8 +126,9 @@ export default function ShoppingCart() {
           <input className="border-2 pl-2 py-2" required placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </section>
         <section className="flex flex-col mb-6">
-          <label className="text-left mb-2 font-semibold">Telefonnummer</label>
+          <label className="text-left mb-2 font-semibold">Telefonnummer*</label>
           <input className="border-2 pl-2 py-2" required placeholder="Telefonnummer" type="text" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+          {errors.phoneNumber && <p className='text-red-500 text-left mt-2'>{errors.phoneNumber}</p>}
         </section>
         <section className="flex flex-col mb-6">
           <label className="text-left mb-2 font-semibold">Weiteres</label>
@@ -98,14 +137,7 @@ export default function ShoppingCart() {
       </div>
       <p className=" mx-auto w-9/12 font-bold text-xl mt-10 lg:mt-20">Gesamtpreis: {finalPrice} €</p>
       <button className="bg-red-600 px-16 py-3 text-white font-semibold mt-14 mb-40"
-        onClick={() => JSON.parse(localStorage.getItem('cart')).map((item) => {
-          const startDate = new Date(item.startDate).toISOString().slice(0, 10);
-          const endDate = new Date(item.endDate).toISOString().slice(0, 10);
-          mutation({ variables: { firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber, startDate: startDate, endDate: endDate, bookingDate: new Date().toISOString().slice(0, 10), size: item.id, street: street, local: local, note: note } })
-          localStorage.removeItem('cart');
-          navigate("/thank-you")
-          return true;
-        })}
+        onClick={handleBooking}
       >Buchen</button>
     </div>
   )
