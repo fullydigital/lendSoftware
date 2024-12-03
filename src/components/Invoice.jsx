@@ -165,7 +165,14 @@ export default function Invoice({itemId, bookings}) {
               )
             }) : null}
 
-            
+
+            <section className='flex-1 text-xs mt-10 text-left'>
+              <p>Notizen:</p>
+              {article.note ? 
+              <p className='font-light mt-1'>{article.note}</p> :
+              <p></p>
+              }
+            </section>
 
 
 

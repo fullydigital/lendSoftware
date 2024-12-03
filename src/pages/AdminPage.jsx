@@ -42,6 +42,7 @@ export default function AdminPage() {
         endDate
         street
         local
+        note
       }
     }
   `;
@@ -253,7 +254,6 @@ export default function AdminPage() {
           <Tr key={item.id}>
             {Object.values(item).map((val) => (
               <>
-              {console.log(currentItems)}
               <Td className="border-2">{val.label ? val.label : val.articleSet ? val.articleSet[0].name : val}</Td>
               {val.label ? <Td className="border-2">{val.articleSet[0] ? val.articleSet[0].name : null}</Td> : null}
               </>
