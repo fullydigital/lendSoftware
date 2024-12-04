@@ -82,7 +82,7 @@ export default function OverallPage({data, bookings}) {
         <div>
         <div>
       {/* Zentral ausgerichteter Selektor */}
-      <div className="flex flex-col lg:flex-row justify-center space-y-4 w-1/3 mx-auto lg:w-full lg:space-x-4 py-4 mb-2 mt-6">
+      <div className="flex flex-col lg:flex-row justify-center space-y-4 w-2/3 mx-auto lg:w-full lg:space-x-4 py-4 mb-2 mt-6">
         <button
           className={`px-6 h-11 mt-4 py-2 border rounded-lg ${
             category === "Racecarver" ? "bg-red-600 text-white" : "bg-gray-200 hover:bg-gray-300"
