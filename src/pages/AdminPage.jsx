@@ -130,7 +130,8 @@ export default function AdminPage() {
   }
 
   const searchForName = () => {
-    var newArray = bookings.filter(item => item.lastName.toLowerCase() === nameSearch.toLowerCase());
+    console.log(sortedBookings);
+    var newArray = sortedBookings.filter(item => item.lastName.toLowerCase() === nameSearch.toLowerCase());
     if (nameSearch === null || nameSearch === '') {
       window
       .fetch('https://backend.sportweber-schnaittach.de/graphql/', {
@@ -146,24 +147,49 @@ export default function AdminPage() {
           console.error(errors);
         }
         if (data.bookings.length !== 0) {
-          setBookings(data.bookings)
+          setSortedBookings(data.bookings)
         };
       })
     } else if (newArray.length > 0) {
-      setBookings(newArray);
+      setSortedBookings(newArray);
     } else {
       alert('Dieser Name ist nicht vorhanden!')
     }
   }
 
+  // const searchForDate = () => {
+  //   var newArray = sortedBookings.filter((item) => new Date(item.startDate) >= time.startDate && new Date(item.endDate) <= time.endDate)
+  //   if (newArray.length > 0) {
+  //     setSortedBookings(newArray);
+  //   } else {
+  //     alert('Für den Zeitraum sind keine Daten vorhanden!')
+  //   }
+  // }
+
   const searchForDate = () => {
-    var newArray = bookings.filter((item) => new Date(item.startDate) >= time.startDate && new Date(item.endDate) <= time.endDate)
-    if (newArray.length > 0) {
-      setBookings(newArray);
-    } else {
-      alert('Für den Zeitraum sind keine Daten vorhanden!')
+    const startDate = new Date(time.startDate);
+    const endDate = new Date(time.endDate);
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      alert("Bitte geben Sie ein gültiges Datum ein.");
+      return;
     }
-  }
+
+    const newArray = sortedBookings.filter((item) => {
+      const itemStart = new Date(item.startDate);
+      const itemEnd = new Date(item.endDate);
+
+      // Check for overlap with the selected range
+      return (itemStart <= endDate && itemEnd >= startDate);
+    });
+
+    if (newArray.length > 0) {
+      console.log("Gefundene Buchungen:", newArray);
+      setSortedBookings(newArray);
+    } else {
+      alert('Für den Zeitraum sind keine Daten vorhanden!');
+    } 
+  };
 
   const handleInvoice = (id) => {
     bookings.map((item) => {
@@ -241,10 +267,10 @@ export default function AdminPage() {
       <Thead>
       <Tr>
           {Object.keys(bookings[0]).map((key) => (
-            <>
+            <React.Fragment key={key}>
               <Th className="border-2">{key}</Th>
               {key === 'size' ? <Th className="border-2">Artikelname</Th> : null}
-              </>
+              </React.Fragment>
               ))}
           <Th>Rechnung</Th>
               </Tr>
@@ -253,10 +279,18 @@ export default function AdminPage() {
       {currentItems.map((item) => (
           <Tr key={item.id}>
             {Object.values(item).map((val) => (
-              <>
-              <Td className="border-2">{val.label ? val.label : val.articleSet ? val.articleSet[0].name : val}</Td>
-              {val.label ? <Td className="border-2">{val.articleSet[0] ? val.articleSet[0].name : null}</Td> : null}
-              </>
+              <React.Fragment key={val?.id || Math.random()}>
+              <Td className="border-2">
+                {val?.label 
+                  ? val.label 
+                  : val?.articleSet?.[0]?.name || val}
+              </Td>
+              {val?.label && (
+                <Td className="border-2">
+                  {val?.articleSet?.[0]?.name || null}
+                </Td>
+              )}
+            </React.Fragment>
             ))}
           <Td className="border-2"><button className="bg-red-600 py-1 px-2 rounded-lg text-white" onClick={() => {handleInvoice(item.id); setShowInvoice(!showInvoice)}}>Rechnung</button></Td>
           </Tr>
