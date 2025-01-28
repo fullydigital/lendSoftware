@@ -46,6 +46,9 @@ export default function Article({item, bookings}) {
       setArticle({...article, startDate: startDate, endDate: endDate, name: item.name, image: item.image, pricePerDay: price});
     } else {
       setBookedAlert(true);
+      setTimeout(() => {
+        setBookedAlert(false);
+      }, 2000);
     }
   }
 
@@ -65,6 +68,9 @@ export default function Article({item, bookings}) {
       setBooked(true);
     } else {
       setAlert(true);
+      setTimeout(() => {
+        setAlert(false);
+      }, 2000);
     }
   }
 
