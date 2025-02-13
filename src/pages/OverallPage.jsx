@@ -110,7 +110,7 @@ export default function OverallPage({data, bookings}) {
       </div>
 
       {/* Artikelanzeige */}
-      <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap lg:gap-2 mb-32">
+      <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap lg:gap-2 mb-32 justify-start">
         {category === "Racecarver" && (
           <>
             {racecarver.map((item) => (
@@ -139,28 +139,28 @@ export default function OverallPage({data, bookings}) {
       <img className="w-full h-auto mt-10" id="accessoires" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
       <div className="mt-16">
         <h2 className="uppercase font-bold text-2xl mt-12">Skistecken</h2>
-        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
+        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto max-w-screen-xl lg:flex-wrap mb-32 lg:gap-2 justify-start">
           {sticks.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
         </div>
         <h2 className="uppercase font-bold text-2xl mt-12">Skihelme</h2>
-        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
+        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto max-w-screen-2xl lg:flex-wrap mb-32 lg:gap-2">
           {helmets.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
         </div>
         <h2 className="uppercase font-bold text-2xl mt-12">Skischuhe</h2>
-        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
+        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto max-w-screen-2xl lg:flex-wrap mb-32 lg:gap-2">
           {shoes.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
         </div>
         <img className="w-full h-auto mt-10" id="kinder" src={require('../assets/bannskirent.webp')} alt="Personen beim  Skifahren" />
         <div className="mt-16">
         <h2 className="uppercase font-bold text-2xl mt-12">Kinder</h2>
-        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
+        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto max-w-screen-2xl lg:flex-wrap mb-32 lg:gap-2 justify-items-start">
           {kids.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
         </div>
         </div>
         <img className="w-full h-auto mt-10" src={require('../assets/bannerbikever.webp')} alt="Personen beim Fahrradfahren"/>
         <div className="mt-16">
           <h2 className="uppercase font-bold text-2xl">Bike-Rent</h2>
-        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto lg:flex-wrap mb-32 lg:gap-2">
+        <div className="flex flex-col lg:flex-row lg:w-11/12 mx-auto max-w-screen-2xl lg:flex-wrap mb-32 lg:gap-2">
             {bikes.map((item) => (<Article item={item} key={item.id} bookings={bookings} />))}
         </div>
         </div>
