@@ -49,21 +49,6 @@ export default function Invoice({itemId, bookings}) {
     return actualPrice;
   }
 
-//   function headerFooterFormatting(doc)
-// {
-//     var totalPages  = doc.internal.getNumberOfPages();
-
-//     for(var i = totalPages; i >= 1; i--)
-//     { //make this page, the current page we are currently working on.
-//         doc.setPage(i);      
-                      
-//         header(doc);
-        
-//         footer(doc, i, totalPages);
-        
-//     }
-// };
-
   const downloadPDF = () => {
     const data = document.getElementById('receipt');
   html2canvas(data).then((canvas) => {
@@ -82,9 +67,41 @@ export default function Invoice({itemId, bookings}) {
     heightLeft -= pageHeight;
   }
   doc.save('Rechnung.pdf');
+  updateInvoiceDownloaded(article.id);
 });
 
 
+  }
+
+  const updateInvoiceDownloaded = (id) => {
+    const mutation = `
+      mutation {
+        updateInvoiceDownloaded(id: ${id}) {
+          booked {
+            id
+            invoiceDownloaded
+          }
+        }
+      }
+    `;
+
+    window
+      .fetch('https://backend.sportweber-schnaittach.de/graphql/', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({query: mutation})
+      })
+      .then((response) => response.json())
+      .then(({data, errors}) => {
+        if (errors) {
+          console.error(errors);
+        }
+        if (data.updateInvoiceDownloaded) {
+          console.log("Invoice downloaded status updated successfully");
+        }
+      });
   }
 
   if(!article) <p>Loading...</p>
