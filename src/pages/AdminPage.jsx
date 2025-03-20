@@ -41,6 +41,7 @@ export default function AdminPage() {
         street
         local
         note
+        invoiceDownloaded
       }
     }
   `;
@@ -121,7 +122,6 @@ export default function AdminPage() {
   }
 
   const searchForName = () => {
-    console.log(sortedBookings);
     var newArray = sortedBookings.filter(item => item.lastName.toLowerCase() === nameSearch.toLowerCase());
     if (nameSearch === null || nameSearch === '') {
       window
@@ -208,7 +208,11 @@ export default function AdminPage() {
     );
   };
 
-  if (!bookings) return "Keine Einträge vorhanden";
+  if (!bookings) return (
+    <div className="flex justify-center items-center h-screen">
+      <div className="spinner"></div>
+    </div>
+  );
 
   // Gruppiere Buchungen nach Vorname, Nachname und Buchungsdatum
   const groupedBookings = sortedBookings.reduce((acc, booking) => {
@@ -255,34 +259,33 @@ export default function AdminPage() {
         <Table className="table-auto border-collapse border-2" key={1}>
           <Thead>
             <Tr>
-              {Object.keys(bookings[0]).map((key) => (
-                <React.Fragment key={key}>
-                  {key !== 'id' && key !== 'size' && key !== 'articleSet' && (
-                    <Th className="border-2">{key}</Th>
-                  )}
-                </React.Fragment>
-              ))}
+              <Th>Name</Th>
+              <Th>Email</Th>
+              <Th>Telefonnummer</Th>
+              <Th>Buchungsdatum</Th>
+              <Th>Verleihdauer</Th>
+              <Th>Straße</Th>
+              <Th>Adresse</Th>
+              <Th>Notiz</Th>
               <Th>Rechnung</Th>
             </Tr>
           </Thead>
           <Tbody>
             {currentItems.map((group, index) => (
-              <Tr key={index}>
-                {Object.entries(group[0]).map(([key, val], idx) => (
-                  <React.Fragment key={idx}>
-                    {key !== 'id' && key !== 'size' && key !== 'articleSet' && (
-                      <Td className="border-2">
-                        {key === 'bookingDate' || key === 'startDate' || key === 'endDate'
-                          ? new Date(val).toLocaleDateString('de-DE')
-                          : val?.label 
-                            ? val.label 
-                            : val?.articleSet?.[0]?.name || val}
-                      </Td>
-                    )}
-                  </React.Fragment>
-                ))}
+              <Tr key={index} className={group[0].invoiceDownloaded ? 'bg-gray-300' : ''}>
+                <Td className="border-2">{group[0].firstName} {group[0].lastName}</Td>
+                <Td className="border-2">{group[0].email}</Td>
+                <Td className="border-2">{group[0].phoneNumber}</Td>
+                <Td className="border-2">{new Date(group[0].bookingDate).toLocaleDateString('de-DE')}</Td>
+                <Td className="border-2">{new Date(group[0].startDate).toLocaleDateString('de-DE')} - {new Date(group[0].endDate).toLocaleDateString('de-DE')}</Td>
+                <Td className="border-2">{group[0].street}</Td>
+                <Td className="border-2">{group[0].local}</Td>
+                <Td className="border-2">{group[0].note}</Td>
                 <Td className="border-2">
-                  <button className="bg-red-600 py-1 px-2 rounded-lg text-white" onClick={() => {handleInvoice(group[0].id); setShowInvoice(!showInvoice)}}>
+                  <button 
+                    className={`py-1 px-2 rounded-lg text-white ${group[0].invoiceDownloaded ? 'bg-gray-500' : 'bg-red-600'}`} 
+                    onClick={() => {handleInvoice(group[0].id); setShowInvoice(!showInvoice)}}
+                  >
                     Rechnung
                   </button>
                 </Td>
